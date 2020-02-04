@@ -27,6 +27,7 @@ func Parse(rd io.Reader) (*Status, error) {
 
 	var (
 		err                   error
+		title                 string
 		clients               []Client
 		routingTable          []Routing
 		maxBcastMcastQueueLen int
@@ -46,7 +47,7 @@ func Parse(rd io.Reader) (*Status, error) {
 
 		fields := strings.Split(scanner.Text(), ",")
 		if fields[0] == "TITLE" {
-
+			title = fields[1]
 		} else if fields[0] == "TIME" {
 
 		} else if fields[0] == "" {
@@ -88,6 +89,7 @@ func Parse(rd io.Reader) (*Status, error) {
 	}
 
 	return &Status{
+		Title:        title,
 		ClientList:   clients,
 		RoutingTable: routingTable,
 		GlobalStats:  GlobalStats{maxBcastMcastQueueLen},

@@ -47,4 +47,6 @@ Temporary Items
 *__.*
 *.tar.?z
 /dist
+/tests
+
 

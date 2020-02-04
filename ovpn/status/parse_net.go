@@ -9,9 +9,11 @@ import (
 )
 
 const (
-	bufferSize = 512
+	infoBufferSize = 75
+	bodyBufferSize = 512
 )
 
+// spawn telnet 127.0.0.1 ${PORT:-7505}
 // expect "for more info"
 // send "status ${NUM}\n"
 // expect "END"
@@ -28,7 +30,7 @@ func ParseAddr(management string) (*Status, error) {
 	defer conn.Close()
 
 	// read first sentence
-	buf := make([]byte, 75)
+	buf := make([]byte, infoBufferSize)
 	if _, err := io.ReadFull(conn, buf); err != nil {
 		return &Status{Result: "conn read false"}, err
 	}
@@ -42,7 +44,7 @@ func ParseAddr(management string) (*Status, error) {
 
 	var data bytes.Buffer
 	// read `status 2` result
-	buf = make([]byte, bufferSize)
+	buf = make([]byte, bodyBufferSize)
 	for {
 		var n int
 		n, err = conn.Read(buf)
@@ -53,7 +55,7 @@ func ParseAddr(management string) (*Status, error) {
 			break
 		}
 		data.Write(buf[:n])
-		if n < bufferSize {
+		if n < bodyBufferSize {
 			if pos := bytes.Index(buf[:n], []byte("END")); pos > -1 {
 				// log.Printf("found END at %d", pos)
 				break
