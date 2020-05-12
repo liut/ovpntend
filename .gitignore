@@ -43,10 +43,15 @@ Temporary Items
 
 # End of https://www.gitignore.io/api/go,macos
 
+.env
 
 *__.*
 *.tar.?z
 /dist
 /tests
+/ovpntend
+/node_modules
+/package-lock.json
+/.ui-build
 
 

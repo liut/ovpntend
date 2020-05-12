@@ -1,0 +1,44 @@
+<p>操作系统: <strong>Windows</strong></p>
+
+<p>
+首先要安装 OpenVPN 客户端, 下载地址 <a href="https://openvpn.net/index.php/open-source/downloads.html">戳这里</a>.
+
+根据自己的系统是 Windows XP 还是 Windows Vista/7/8/10, 以及系统是 32 位还是 64 位, 来确定下载哪一个客户端. (<a href="http://support.microsoft.com/kb/827218">如何确定计算机运行的是 32 位还是 64 位版本的 Windows 操作系统</a>)
+</p>
+
+<p>下载完成后，安装 OpenVPN 客户端，全部用默认选项 (一路 Next / 下一步). 然后按照如下步骤配置.</p>
+
+<ol>
+  <li>
+    <p>在桌面的 OpenVPN 图标上点击右键 - "属性"</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/00.png', _external=True) }}" alt=""></p>
+  </li>
+  <li>
+    <p>在属性的 "快捷方式" 选项卡下点 "打开文件位置" 按钮</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/01.png', _external=True) }}" alt=""></p>
+  </li>
+  <li>
+    <p>在资源管理器的地址栏退到上一级名为 "OpenVPN" 的文件夹</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/02.png', _external=True) }}" alt=""></p>
+  </li>
+  <li>
+    <p>打开 "OpenVPN" 文件夹下的 "config" 文件夹</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/03.png', _external=True) }}" alt=""></p>
+  </li>
+  <li>
+    <p>将邮件附件中的证书下载到本机, 不要打开, 直接移动到 "config" 文件夹中</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/04.png', _external=True) }}" alt=""></p>
+  </li>
+  <li>
+    <p>回到桌面, 在 OpenVPN 图标上点击右键 - "以管理员身份运行"</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/05.png', _external=True) }}" alt=""></p>
+  </li>
+  <li>
+    <p>此时右下角托盘区应该已经出现带锁的 OpenVPN 图标 (如果没看到可以点小三角形展开托盘看看), 右键点击图标，选择 "Connect"</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/06.png', _external=True) }}" alt=""></p>
+  </li>
+  <li>
+    <p>OpenVPN 会打开一个窗口提示连接状态, 等待这个窗口自动消失, 同时右下角带锁图标变绿, 说明已经连接成功. 此时网络环境为直连公司内网, 可以访问代码仓库、管理员后台等内部系统.</p>
+    <p><img src="{{ url_for('static', filename='media/os-windows/07.png', _external=True) }}" alt=""></p>
+  </li>
+</ol>

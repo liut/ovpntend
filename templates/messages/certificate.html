@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>OpenVPN Certificate Distribution</title>
+  <style>
+    .metainfo {
+      font-size: 12px;
+      background-color: #efefef;
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h2>证书请求</h2>
+  <div class="metainfo">
+    <dl>
+      <dt>ID</dt>
+      <dd>{{ certificate.uid }}</dd>
+
+      <dt>Email</dt>
+      <dd>{{ certificate.email }}</dd>
+
+      <dt>Creation Time</dt>
+      <dd>{{ certificate.creation_time.to('local').format('YYYY-MM-DD HH:mm') }}</dd>
+
+      <dt>IP</dt>
+      <dd>{{ certificate.creation_ipaddr }}</dd>
+    </dl>
+  </div>
+
+  <h2>安装方法</h2>
+  {% include 'messages/os-%s.html' % certificate.client_os.value %}
+  <p>如有疑问, 请联系技术团队.</p>
+
+  <h2>注意事项</h2>
+  <p>OpenVPN 证书可用于接入公司内网, 请勿外泄. 如果不慎外泄或安装了证书的电脑失窃, 请联系技术团队销毁旧证书并重新签发.</p>
+</body>
+</html>

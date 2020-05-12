@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Tunnel</title>
+  <script src="{{ url_for('static', filename='bundle.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='bundle.css') }}">
+</head>
+<body>
+  <div class="container">
+  {%- for category, message in messages | default(get_flashed_messages(with_categories=True)) %}
+    <div class="alert alert-{{ category }} j-flashed-message" data-category="{{ category }}">
+      <a class="close" data-dismiss="alert" href="#">×</a>
+      {{ message }}
+    </div>
+  {%- endfor %}
+  {%- block body %}
+  {%- endblock %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OpenVPN Certificate Distribution</title>
+<style>
+.metainfo {
+	font-size: 12px;
+	background-color: #efefef;
+	padding: 1em;
+
+}
+</style>
+</head>
+<body>
+<h2>注意事项</h2>
+<p>OpenVPN 证书可用于接入公司内网, 请勿外泄. 如果不慎外泄或安装了证书的电脑失窃, 请联系技术团队销毁旧证书并重新签发.</p>
+
+<h2>安装方法</h2>
+<p>操作系统: <strong>Linux</strong></p>
+
+<p>
+因为 Linux 发行版实在太多了, 无法一一说明, 还请移步<a href="https://openvpn.net/index.php/access-server/docs/admin-guides/182-how-to-connect-to-access-server-with-linux-clients.html">官方文档</a>吧.
+</p>
+
+<p>
+_(:з」∠)_
+</p>
+
+<p>常用发行版简要说明:</p>
+<p>Debian 和 Ubuntu 系 使用 sudo apt-get install openvpn 安装</p>
+<p>Redhat 和 CentOS 系 使用 sudo yum install epel-release 安装扩展, 然后 sudo yum install openvpn 安装openvpn</p>
+<p>安装后将证书文件放在/etc/openvpn下</p>
+<p>启动: systemctl start openvpn@配置文件名.service (Redhat 不能用该方法, 可以尝试systemctl start openvpn)</p>
+
+<p>如有疑问, 请联系技术团队.</p>
+</body>
+</html>

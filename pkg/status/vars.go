@@ -1,0 +1,65 @@
+package status
+
+var clientListHeaderColumns = []string{
+	"HEADER",
+	"CLIENT_LIST",
+	"Common Name",
+	"Real Address",
+	"Virtual Address",
+	"Virtual IPv6 Address",
+	"Bytes Received",
+	"Bytes Sent",
+	"Connected Since",
+	"Connected Since (time_t)",
+	"Username",
+	"Client ID",
+	"Peer ID",
+}
+
+var routingTableHeadersColumns = []string{
+	"HEADER",
+	"ROUTING_TABLE",
+	"Virtual Address",
+	"Common Name",
+	"Real Address",
+	"Last Ref",
+	"Last Ref (time_t)",
+}
+
+// judge header data matched or not
+const (
+	clientListHeaders = 1 << iota
+	routingTableHeaders
+	globalStatsHeaders
+)
+
+func checkClientListHeader(headers []string) bool {
+	for i, v := range headers {
+		if v != clientListHeaderColumns[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func checkRoutingTableHeader(headers []string) bool {
+	for i, v := range headers {
+		if v != routingTableHeadersColumns[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func checkHeaders(headers []string) int {
+	if checkClientListHeader(headers) {
+		return clientListHeaders
+	} else if checkRoutingTableHeader(headers) {
+		return routingTableHeaders
+	} else {
+		return 0
+	}
+}
+
+// Time Parse
+const dateLayout = "Mon Jan _2 15:04:05 2006"

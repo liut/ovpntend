@@ -11,8 +11,8 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 
-	"fhyx.tech/platform/openvpn-monitor/ovpn/settings"
-	"fhyx.tech/platform/openvpn-monitor/ovpn/status"
+	"fhyx.tech/platform/ovpntend/pkg/settings"
+	"fhyx.tech/platform/ovpntend/pkg/status"
 )
 
 var (
@@ -71,6 +71,9 @@ func handlerStatus(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), 400)
 		return
+	}
+	if len(settings.Current.ManageNames) >= idx+1 {
+		result.Label = settings.Current.ManageNames[idx]
 	}
 	render.JSON(w, req, result)
 }
