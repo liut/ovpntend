@@ -28,7 +28,7 @@ func Execute() {
 
 	zlog.Set(sugar)
 	if inDevelop() {
-		logger().Info("in develop")
+		logger().Infow("in develop")
 	}
 
 	if err := RootCmd.Execute(); err != nil {

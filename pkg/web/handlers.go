@@ -42,14 +42,18 @@ func apiOk(w http.ResponseWriter, r *http.Request, data interface{}, count int) 
 	render.JSON(w, r, res)
 }
 
-func handlerStatus(w http.ResponseWriter, req *http.Request) {
+func handlerNames(w http.ResponseWriter, r *http.Request) {
+	render.JSON(w, r, render.M{"status": 0, "names": settings.Current.ManageNames})
+}
+
+func handlerStatus(w http.ResponseWriter, r *http.Request) {
 	count := len(settings.Current.ManageAddrs)
 	if count == 0 {
 		w.WriteHeader(204)
 		return
 	}
 	var idx int
-	if s := chi.URLParam(req, "idx"); s != "" {
+	if s := chi.URLParam(r, "idx"); s != "" {
 		idx, _ = strconv.Atoi(s)
 	}
 	if idx >= count {
@@ -71,7 +75,7 @@ func handlerStatus(w http.ResponseWriter, req *http.Request) {
 	if len(settings.Current.ManageNames) > idx {
 		result.Label = settings.Current.ManageNames[idx]
 	}
-	apiOk(w, req, result.ClientList, len(result.ClientList))
+	render.JSON(w, r, render.M{"status": 0, "clients": result.ClientList, "name": result.Label})
 }
 
 type getClientParam struct {

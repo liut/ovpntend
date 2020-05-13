@@ -34,13 +34,18 @@ before_script:
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
 .modcache: &modcache
-  key: modcache
+  key: modcache1
   paths:
     - vendor/go/pkg/mod
 
 deps:
   stage: deps
-  script: go mod download
+  script:
+    - git config --global url."git@git.fhyx.tech:".insteadOf "https://git.fhyx.tech/"
+    - test -d $GOPATH/pkg/mod && ls -al $GOPATH/pkg/mod
+    # - go get -v fhyx.tech/gopak/binding
+    # - go list -m -json -versions fhyx.tech/gopak/binding
+    - go mod download
   cache: *modcache
 
 test-lint:

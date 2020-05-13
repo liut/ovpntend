@@ -31,7 +31,7 @@ func startUp() {
 
 	idleConnsClosed := make(chan struct{})
 	go func() {
-		logger().Info("waiting signal")
+		logger().Infow("waiting signal")
 		sigint := make(chan os.Signal, 1)
 		signal.Notify(sigint, os.Interrupt, os.Kill, syscall.SIGTERM)
 		sig := <-sigint

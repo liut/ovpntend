@@ -31,6 +31,7 @@ func (s *server) strapRouter() {
 
 	s.ar.Route("/api/vpn", func(r chi.Router) {
 		r.Use(staffio.Middleware(staffio.WithRefresh()))
+		r.Get("/names", handlerNames)
 		r.Get("/status/{idx}", handlerStatus)
 		r.Post("/client/send", handlerSendClient)
 	})
@@ -44,5 +45,5 @@ func handleNoContent(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerPing(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("OK\n"))
+	w.Write([]byte("Pong\n"))
 }

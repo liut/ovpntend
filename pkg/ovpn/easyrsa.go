@@ -1,10 +1,13 @@
 package ovpn
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io/ioutil"
 	"os"
-	"os/exec"
+	"path"
+	"text/template"
 
 	expect "github.com/ThomasRooney/gexpect"
 
@@ -32,6 +35,10 @@ func init() {
 
 // CreateCertificate ...
 func CreateCertificate(name string) {
+	if len(name) == 0 {
+		logger().Fatalw("empty name")
+		return
+	}
 	e, err := expect.Spawn("easyrsa build-client-full " + name + " nopass")
 	if err != nil {
 		logger().Fatalw("call easyrsa fail", "name", name, "err", err)
@@ -54,11 +61,69 @@ func GenerateCRL() {
 
 // GetClientConfig ...
 func GetClientConfig(ctx context.Context, name string) (out []byte, err error) {
-	cmd := exec.CommandContext(ctx, "sh", "script/ovpn_getclient", name)
-	cmd.Env = cmdEnv
-	out, err = cmd.Output()
-	if err != nil {
-		logger().Warnw("call ovpn_getclient fail", "name", name, "err", err)
+	if len(name) == 0 {
+		err = ErrEmptyConfig
+		return
 	}
+	cc := map[string]interface{}{
+		"host":  settings.Current.OpenVPNHost,
+		"port":  settings.Current.OpenVPNPort,
+		"proto": settings.Current.OpenVPNProto,
+		"dev":   "tun",
+	}
+	names := map[string]string{
+		"key":  "private/" + name + ".key",
+		"cert": "issued/" + name + ".crt",
+		"ca":   "ca.crt",
+		"dh":   "dh.pem",
+		"ta":   "ta.key",
+	}
+
+	dir := settings.Current.EasyRSAPKI
+
+	for k, file := range names {
+		var b []byte
+		b, err = ioutil.ReadFile(path.Join(dir, file))
+		if err != nil {
+			logger().Infow("read fail", "file", file, "err", err)
+			return
+		}
+		logger().Debugw("read ok", "file", file)
+		cc[k] = string(bytes.TrimRight(b, "\n"))
+	}
+
+	var buf = new(bytes.Buffer)
+	t := template.Must(template.New("cc").Parse(ccTpl))
+	err = t.Execute(buf, cc)
+	out = buf.Bytes()
+
 	return
 }
+
+const (
+	ccTpl = `
+client
+nobind
+dev {{ .dev }}
+remote-cert-tls server
+
+remote {{ .host }} {{ .port }} {{ .proto }}
+
+<key>
+{{ .key }}
+</key>
+<cert>
+{{ .cert }}
+</cert>
+<ca>
+{{ .ca }}
+</ca>
+<dh>
+{{ .dh }}
+</dh>
+<tls-auth>
+{{ .ta }}
+</tls-auth>
+key-direction 1
+`
+)

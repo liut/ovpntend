@@ -15,7 +15,7 @@ GO=$(shell which go)
 
 main: vet
 	@echo "Building $(NAME)"
-	@go build -ldflags="$(LDFLAGS)" $(ROOF)
+	@$(GO) build -ldflags="$(LDFLAGS)" $(ROOF)
 
 all: dist package
 
