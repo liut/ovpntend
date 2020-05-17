@@ -33,6 +33,8 @@ before_script:
   - chmod 0600 ~/.ssh/id_ecdsa
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
+  - git config --global url."git@git.fhyx.tech:".insteadOf "https://git.fhyx.tech/"
+
 .modcache: &modcache
   key: modcache1
   paths:
@@ -41,10 +43,10 @@ before_script:
 deps:
   stage: deps
   script:
-    - git config --global url."git@git.fhyx.tech:".insteadOf "https://git.fhyx.tech/"
     - test -d $GOPATH/pkg/mod && ls -al $GOPATH/pkg/mod
     # - go get -v fhyx.tech/gopak/binding
     # - go list -m -json -versions fhyx.tech/gopak/binding
+    - ls -al /cache/
     - go mod download
   cache: *modcache
 

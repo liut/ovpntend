@@ -23,9 +23,10 @@ type Config struct {
 	EasyRSAPKI        string `envconfig:"EASYRSA_PKI" default:"/etc/openvpn/pki"`
 	EasyRSACaPassword string `envconfig:"EASYRSA_CA_PASSWORD"`
 
-	OpenVPNHost  string `envconfig:"SERVER_NAME"`
-	OpenVPNPort  int    `envconfig:"SERVER_PORT" default:"1194"`
-	OpenVPNProto string `envconfig:"SERVER_PROTO" default:"udp"`
+	ServerHost  string `envconfig:"SERVER_NAME"`
+	ServerPort  int    `envconfig:"SERVER_PORT" default:"1194"`
+	ServerProto string `envconfig:"SERVER_PROTO" default:"udp"`
+	ServerPlace string `envconfig:"SERVER_Place" `
 
 	MailEnabled        bool   `envconfig:"SMTP_ENABLED"`
 	MailHost           string `envconfig:"SMTP_HOST"`

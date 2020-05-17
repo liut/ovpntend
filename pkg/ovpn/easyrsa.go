@@ -3,38 +3,16 @@ package ovpn
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io/ioutil"
-	"os"
 	"path"
 	"text/template"
 
 	expect "github.com/ThomasRooney/gexpect"
-
-	"fhyx.tech/platform/ovpntend/pkg/settings"
 )
-
-var (
-	caPassword string
-	timeout    = 15
-
-	cmdEnv []string
-)
-
-func init() {
-	caPassword = settings.Current.EasyRSACaPassword
-	cmdEnv = append(os.Environ(),
-		"EASYRSA="+settings.Current.EasyRSABIN,
-		"EASYRSA_PKI="+settings.Current.EasyRSAPKI,
-		"OVPN_CN="+settings.Current.OpenVPNHost,
-		"OVPN_DEFROUTE=0",
-		fmt.Sprintf("OVPN_PORT=%d", settings.Current.OpenVPNPort),
-		"OVPN_PROTO="+settings.Current.OpenVPNProto,
-	)
-}
 
 // CreateCertificate ...
 func CreateCertificate(name string) {
+	// TODO: set env for cmd
 	if len(name) == 0 {
 		logger().Fatalw("empty name")
 		return
@@ -51,6 +29,7 @@ func CreateCertificate(name string) {
 
 // GenerateCRL ...
 func GenerateCRL() {
+	// TODO: set env for cmd
 	e, err := expect.Spawn("easyrsa gen-crl")
 	if err != nil {
 		logger().Fatalw("call easyrsa fail", "err", err)
@@ -66,9 +45,9 @@ func GetClientConfig(ctx context.Context, name string) (out []byte, err error) {
 		return
 	}
 	cc := map[string]interface{}{
-		"host":  settings.Current.OpenVPNHost,
-		"port":  settings.Current.OpenVPNPort,
-		"proto": settings.Current.OpenVPNProto,
+		"host":  serverHost,
+		"port":  serverPort,
+		"proto": serverProto,
 		"dev":   "tun",
 	}
 	names := map[string]string{
@@ -79,11 +58,9 @@ func GetClientConfig(ctx context.Context, name string) (out []byte, err error) {
 		"ta":   "ta.key",
 	}
 
-	dir := settings.Current.EasyRSAPKI
-
 	for k, file := range names {
 		var b []byte
-		b, err = ioutil.ReadFile(path.Join(dir, file))
+		b, err = ioutil.ReadFile(path.Join(easyrasPKI, file))
 		if err != nil {
 			logger().Infow("read fail", "file", file, "err", err)
 			return

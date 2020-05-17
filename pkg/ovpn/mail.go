@@ -9,7 +9,6 @@ import (
 	"github.com/go-mail/mail"
 
 	"fhyx.tech/platform/ovpntend/pkg/assets"
-	"fhyx.tech/platform/ovpntend/pkg/settings"
 )
 
 // vars
@@ -30,13 +29,6 @@ func ParseOSCat(osc string) bool {
 
 // SendConfig ...
 func SendConfig(ctx context.Context, name, oscat string) error {
-	var (
-		smtpHost   = settings.Current.MailHost
-		smtpPort   = settings.Current.MailPort
-		smtpUser   = settings.Current.MailSenderEmail
-		smtpPass   = settings.Current.MailSenderPassword
-		senderName = settings.Current.MailSenderName
-	)
 	body, err := GetClientConfig(ctx, name)
 	if err != nil {
 		return err
@@ -58,7 +50,7 @@ func SendConfig(ctx context.Context, name, oscat string) error {
 	m.SetHeader("To", name)
 	m.SetHeader("Subject", "Your OVPN Config!")
 	m.SetBody("text/html", tpl)
-	m.Attach(name+".ovpn", mail.SetCopyFunc(func(w io.Writer) error {
+	m.Attach(name+ssuffix+".ovpn", mail.SetCopyFunc(func(w io.Writer) error {
 		_, err := w.Write(body)
 		return err
 	}))
