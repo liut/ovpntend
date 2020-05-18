@@ -1,0 +1,54 @@
+{{ define "title" }}Login{{ end }}
+{{ define "head" }}
+{{ end }}
+
+{{ define "content" }}
+
+  <div class="clearfix page-guide">
+    <h2 class="pull-left">OpenVPN 客户端状态</h2>
+    <div class="pull-right btn-return">
+      <ul class="nav nav-pills">
+        <li role="presentation"><span class="btn">Welcome {{ .user.Name }}!</span>{{ .user.Avatar | avatarHTML }}</li>
+        <li role="presentation">
+          <a href="./" class="btn btn-default">返回</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <hr>
+
+  数据自来 <span title="{{ .status.GlobalStats.MaxBcastMcastQueueLength }}">{{ .status.Label }}<span>
+  <hr>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>用户名</th>
+        <th>登录地点</th>
+        <th>登录时长</th>
+        <th>上行流量</th>
+        <th>下行流量</th>
+        <th>虚拟地址</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range .status.ClientList }}
+      <tr>
+        <td title="{{ .CommonName }}">{{ .CommonName }}</td>
+        {{ if .RealAddress.Host | isOffice }}
+          <td title="{{ .RealAddress.Host }}">办公室</td>
+        {{ else }}
+          <td title="{{ .RealAddress.Host }}">{{ .RealAddress.Host | findPlace }}</td>
+        {{ end }}
+        <td title="于 {{ .ConnectedSince }} 建立连接">{{ .ConnectedSince | duration }}</td>
+        <td>{{ .BytesReceived | formatBytes }}</td>
+        <td>{{ .BytesSent | formatBytes }}</td>
+        <td>{{- /* .status.Routings[.CommonName].virtual_address */ -}} {{ .VirtualAddress }}</td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+{{ end }}
+{{ define "tail" }}
+{{ end }}
+

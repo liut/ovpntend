@@ -60,6 +60,7 @@ func handlerStatus(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(400)
 		return
 	}
+
 	var result *status.Status
 	var err error
 
@@ -75,7 +76,15 @@ func handlerStatus(w http.ResponseWriter, r *http.Request) {
 	if len(settings.Current.ManageNames) > idx {
 		result.Label = settings.Current.ManageNames[idx]
 	}
-	render.JSON(w, r, render.M{"status": 0, "clients": result.ClientList, "name": result.Label})
+	switch render.GetAcceptedContentType(r) {
+	case render.ContentTypeJSON:
+		render.JSON(w, r, render.M{"status": 0, "clients": result.ClientList, "name": result.Label})
+		break
+	case render.ContentTypeHTML:
+		renderHTML(w, r, "status.html", render.M{"status": result})
+		break
+	}
+	w.WriteHeader(http.StatusNotImplemented)
 }
 
 type getClientParam struct {
@@ -97,4 +106,12 @@ func handlerSendClient(w http.ResponseWriter, r *http.Request) {
 	}
 
 	apiOk(w, r, nil, 0)
+}
+
+func handlerHome(w http.ResponseWriter, r *http.Request) {
+	data := render.M{
+		"action":  URLFor("client/send"),
+		"domains": []string{"phoenixtv.com"},
+	}
+	renderHTML(w, r, "home.html", data)
 }

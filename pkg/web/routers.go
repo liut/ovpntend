@@ -27,7 +27,6 @@ func (s *server) strapRouter() {
 		suffix = "/" + settings.Current.ServerPlace
 	}
 
-	s.ar.Get("/", handleNoContent)
 	s.ar.Get("/ping", handlerPing)
 
 	s.ar.Route("/auth", func(r chi.Router) {
@@ -43,7 +42,13 @@ func (s *server) strapRouter() {
 		r.Post("/client/send", handlerSendClient)
 	})
 
-	// TODO: show html templates
+	// s.ar.Get("/", handleNoContent)
+	SetAdminPath("/")
+	s.ar.Group(func(r chi.Router) {
+		r.Use(staffio.Middleware(staffio.WithRefresh(), staffio.WithURI(staffio.LoginPath)))
+		r.Get("/", handlerHome)
+		r.Get("/status/{idx}", handlerStatus)
+	})
 
 }
 

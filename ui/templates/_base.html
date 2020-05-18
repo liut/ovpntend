@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Tunnel</title>
+  <script src="/static/bundle.js"></script>
+  <link rel="stylesheet" href="/static/bundle.css">
+    {{ template "head" . }}
+</head>
+<body>
+  <div class="container">
+
+    {{ range .session.Flashes }}
+        <div class="alert alert-warning">
+          <a class="close" data-dismiss="alert" href="#">×</a>
+          {{ . }}
+        </div>
+    {{ end }}
+
+    {{ template "content" . }}
+
+    {{ template "tail" . }}
+
+  </div>
+</body>
+</html>

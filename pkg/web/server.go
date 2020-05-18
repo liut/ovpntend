@@ -9,6 +9,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+
+	"fhyx.tech/platform/ovpntend/pkg/assets"
 )
 
 type server struct {
@@ -23,7 +25,7 @@ func New(debug bool, addr string) interface {
 	Serve()
 	Stop()
 } {
-
+	inDev = debug
 	ar := chi.NewMux()
 	if debug {
 		ar.Use(middleware.Logger)
@@ -32,6 +34,16 @@ func New(debug bool, addr string) interface {
 
 	s := &server{Addr: addr, ar: ar}
 	s.strapRouter()
+
+	s.ar.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.RequestURI, "/static") {
+			assets.ServeHTTP(w, r)
+			return
+		}
+		logger().Infow("not found", "uri", r.RequestURI)
+		http.NotFound(w, r)
+	})
+
 	s.hs = &http.Server{
 		Addr:    s.Addr,
 		Handler: s.ar,
@@ -52,6 +64,7 @@ func New(debug bool, addr string) interface {
 }
 
 func (s *server) Serve() {
+	logger().Infow("listen web server", "addr", s.Addr)
 	err := s.hs.ListenAndServe()
 	if err != nil {
 		logger().Errorw("server start fail", "err", err)

@@ -4,10 +4,16 @@ import (
 	"time"
 )
 
+// HostPort ...
+type HostPort struct {
+	Host string `json:"host"`
+	Port string `json:"port"`
+}
+
 // Client ...
 type Client struct {
 	CommonName         string     `json:"name"`
-	RealAddress        string     `json:"addr"`
+	RealAddress        HostPort   `json:"addr"`
 	VirtualAddress     string     `json:"vip"`
 	VirtualIPv6Address string     `json:"vip6,omitempty"`
 	BytesReceived      int        `json:"recv"`

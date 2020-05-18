@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"log"
+	"net"
 	"os"
 	"strconv"
 	"strings"
@@ -56,8 +57,12 @@ func Parse(rd io.Reader) (*Status, error) {
 			judgeFileType = clientListHeaders
 		} else if judgeFileType == clientListHeaders && len(fields) == len(clientListHeaderColumns)-1 {
 			ct, _ = time.Parse(dateLayout, fields[7])
+			host, port, _ := net.SplitHostPort(fields[2])
 			clients = append(clients, Client{
-				fields[1], fields[2], fields[3], fields[4], Atoi(fields[5]), Atoi(fields[6]), &ct, Atoi(fields[8]), fields[9], Atoi(fields[10]), Atoi(fields[11])})
+				fields[1], HostPort{host, port},
+				fields[3], fields[4], Atoi(fields[5]),
+				Atoi(fields[6]), &ct, Atoi(fields[8]),
+				fields[9], Atoi(fields[10]), Atoi(fields[11])})
 		} else if fields[0] == "" {
 
 		} else if checkHeaders(fields) == routingTableHeaders {
