@@ -3,7 +3,6 @@ package status
 import (
 	"bufio"
 	"io"
-	"log"
 	"net"
 	"os"
 	"strconv"
@@ -42,11 +41,13 @@ func Parse(rd io.Reader) (*Status, error) {
 		isEmpty = false
 
 		var (
-			ct time.Time
-			rt time.Time
+			err error
+			ct  time.Time
+			rt  time.Time
 		)
 
 		fields := strings.Split(scanner.Text(), ",")
+		logger().Debugw("got line", "fields", fields)
 		if fields[0] == "TITLE" {
 			title = fields[1]
 		} else if fields[0] == "TIME" {
@@ -56,7 +57,12 @@ func Parse(rd io.Reader) (*Status, error) {
 		} else if checkHeaders(fields) == clientListHeaders {
 			judgeFileType = clientListHeaders
 		} else if judgeFileType == clientListHeaders && len(fields) == len(clientListHeaderColumns)-1 {
-			ct, _ = time.Parse(dateLayout, fields[7])
+			ct, err = time.ParseInLocation(dateLayout, fields[7], time.Local)
+			if err != nil {
+				logger().Infow("parse time fail", "err", err)
+			} else {
+				logger().Debugw("parsed", "t", ct, "since", time.Since(ct))
+			}
 			host, port, _ := net.SplitHostPort(fields[2])
 			clients = append(clients, Client{
 				fields[1], HostPort{host, port},
@@ -68,7 +74,10 @@ func Parse(rd io.Reader) (*Status, error) {
 		} else if checkHeaders(fields) == routingTableHeaders {
 			judgeFileType = routingTableHeaders
 		} else if judgeFileType == routingTableHeaders && len(fields) == len(routingTableHeadersColumns)-1 {
-			rt, _ = time.Parse(dateLayout, fields[4])
+			rt, err = time.ParseInLocation(dateLayout, fields[4], time.Local)
+			if err != nil {
+				logger().Infow("parse time fail", "err", err)
+			}
 			routingTable = append(routingTable, Routing{fields[1], fields[2], fields[3], &rt, Atoi(fields[5])})
 		} else if fields[0] == "GLOBAL_STATS" {
 			if fields[1] == "Max bcast/mcast queue length" {
@@ -77,7 +86,7 @@ func Parse(rd io.Reader) (*Status, error) {
 				if err == nil {
 					maxBcastMcastQueueLen = i
 				} else {
-					log.Printf("strconv ERR %s", err)
+					logger().Infow("strconv fail", "err", err)
 				}
 			}
 		} else if fields[0] == "END" {
@@ -105,7 +114,7 @@ func Parse(rd io.Reader) (*Status, error) {
 func Atoi(v string) int {
 	i, err := strconv.Atoi(v)
 	if err != nil {
-		log.Printf("Type transform err: %v", err)
+		logger().Infow("type transform fail", "err", err)
 	}
 	return i
 }

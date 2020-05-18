@@ -35,14 +35,19 @@ func New(debug bool, addr string) interface {
 	s := &server{Addr: addr, ar: ar}
 	s.strapRouter()
 
-	s.ar.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasPrefix(r.RequestURI, "/static") {
-			assets.ServeHTTP(w, r)
-			return
-		}
-		logger().Infow("not found", "uri", r.RequestURI)
-		http.NotFound(w, r)
-	})
+	if debug {
+		s.ar.NotFound(http.FileServer(http.Dir("./ui")).ServeHTTP)
+	} else {
+		s.ar.NotFound(assets.ServeHTTP)
+		// s.ar.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		// 	if strings.HasPrefix(r.RequestURI, "/static") {
+		// 		assets.ServeHTTP(w, r)
+		// 		return
+		// 	}
+		// 	logger().Infow("not found", "uri", r.RequestURI)
+		// 	http.NotFound(w, r)
+		// })
+	}
 
 	s.hs = &http.Server{
 		Addr:    s.Addr,

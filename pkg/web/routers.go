@@ -47,7 +47,8 @@ func (s *server) strapRouter() {
 	s.ar.Group(func(r chi.Router) {
 		r.Use(staffio.Middleware(staffio.WithRefresh(), staffio.WithURI(staffio.LoginPath)))
 		r.Get("/", handlerHome)
-		r.Get("/status/{idx}", handlerStatus)
+		r.Get("/status{idx}", handlerStatus)
+		r.Get("/status", handlerStatus)
 	})
 
 }

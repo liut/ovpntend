@@ -61,7 +61,7 @@ func tpl(name string) *template.Template {
 	// }
 
 	t := template.New("_base.html").Funcs(template.FuncMap{
-		"duration":    func(t time.Time) time.Duration { return time.Now().Sub(t) },
+		"duration":    time.Since,
 		"formatBytes": FormatBytes,
 		"findPlace":   FindPlace,
 		"isOffice":    IsOfficeIP,
@@ -111,7 +111,7 @@ func URLFor(path string) string {
 func FindPlace(ip string) string {
 	city, pro, _ := ipip.FindCity(ip)
 	if city != "" {
-		if pro != "" {
+		if pro != "" && pro != city {
 			return pro + city
 		}
 		return city
