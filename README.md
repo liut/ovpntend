@@ -1,14 +1,33 @@
-# go-openvpn-status
+# OVPNtend
 
-## Usage
+Display OpenVPN connnecting status and certificates management
 
-```go
-status, _ := status.ParseFile("examples/log_status.txt")
 
-fmt.Println(status.RoutingTable)
+## build frontend resources
 
-fmt.Println(status.ClientList)
+```sh
 
-fmt.Println(status.GlobalStats)
+gulp build
+
+make assets
+
+```
+
+## build and deploy
+
+```sh
+
+make dist
+
+make package
+
+```
+
+
+## Developing
+
+```sh
+
+forego start
 
 ```
