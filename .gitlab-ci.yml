@@ -4,6 +4,7 @@ stages:
   - deps
   - lint
   - test
+  - release
 
 variables:
   OVPN_EASYRSA_PKI: /build/test
@@ -24,6 +25,7 @@ before_script:
   - export ROOF=fhyx.tech/platform/ovpntend
   - export DATE=$(date '+%Y%m%d')
   - export TAG="${DATE}-${CI_JOB_ID}"
+  - export LDFLAGS="-X ${ROOF}/cmd.built=${DATE} -X ${ROOF}/cmd.name=${NAME} -X ${ROOF}/cmd.version=${TAG} -X ${ROOF}/settings.version=${TAG}"
   - echo "${TAG}"
 
   # Deploy SSH
@@ -63,6 +65,26 @@ test-status:
   stage: test
   script:
     - go test -v -cover ./pkg/status
+  cache:
+    <<: *modcache
+    policy: pull
+
+release:
+  stage: release
+  services: []
+  script:
+    - echo -e "Host ${DEPLOY_HOST:-vesta}\n\tPort ${DEPLOY_PORT:-13800}\n\tUser ${DEPLOY_USER:-sa}\n\n" >> ~/.ssh/config
+    - mkdir -p dist/linux_amd64
+    - GOOS=linux GOARCH=amd64 go build -ldflags "${LDFLAGS} -s -w" -o dist/linux_amd64/${NAME} ${CI_PROJECT_DIR}
+    - ls dist/linux_amd64 | xargs tar -cvJf ${NAME}-linux-amd64-${TAG}.tar.xz -C dist/linux_amd64
+    - scp *-linux-amd64-*.tar.?z "${DEPLOY_HOST:-vesta}:/var/opt/gopkg/"
+  artifacts:
+    name: "${CI_JOB_STAGE}_${CI_JOB_ID}"
+    paths:
+     - dist/
+  only:
+    - master@platform/ovpntend
+  when: on_success
   cache:
     <<: *modcache
     policy: pull
