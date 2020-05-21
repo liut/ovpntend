@@ -25,6 +25,10 @@ func init() {
 
 // FindCity ...
 func FindCity(ip string) (city, province, country string) {
+	if IsPrivate(ip) {
+		city = "[内网]"
+		return
+	}
 	if cityP == nil {
 		return
 	}
