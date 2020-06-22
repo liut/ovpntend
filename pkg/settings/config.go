@@ -19,6 +19,11 @@ type Config struct {
 	ManageNames []string `envconfig:"manage_names" default:"first"`
 	StatusDir   string   `envconfig:"status_dir"`
 
+	CookieName   string `envconfig:"Cookie_Name" default:"staff"`
+	CookiePath   string `envconfig:"Cookie_Path" default:"/"`
+	CookieDomain string `envconfig:"Cookie_Domain"`
+	CookieMaxAge int    `envconfig:"Cookie_MaxAge"`
+
 	EasyRSABIN        string `envconfig:"EASYRSA_BIN" default:"/usr/local/bin"`
 	EasyRSAPKI        string `envconfig:"EASYRSA_PKI" default:"/etc/openvpn/pki"`
 	EasyRSACaPassword string `envconfig:"EASYRSA_CA_PASSWORD"`

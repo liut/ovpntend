@@ -18,7 +18,17 @@ var (
 	SetLoginPath    = staffio.SetLoginPath
 	SetAdminPath    = staffio.SetAdminPath
 	UserFromContext = staffio.UserFromContext
+
+	authzr staffio.Authorizer
 )
+
+func init() {
+	authzr = staffio.NewAuth(staffio.WithRefresh(), staffio.WithURI(staffio.LoginPath), staffio.WithCookie(
+		settings.Current.CookieName,
+		settings.Current.CookiePath,
+		settings.Current.CookieDomain,
+	))
+}
 
 func (s *server) strapRouter() {
 
@@ -36,7 +46,7 @@ func (s *server) strapRouter() {
 	})
 
 	s.ar.Route("/api/vpn"+suffix, func(r chi.Router) {
-		r.Use(staffio.Middleware(staffio.WithRefresh()))
+		r.Use(authzr.Middleware())
 		r.Get("/names", handlerNames)
 		r.Get("/status/{idx}", handlerStatus)
 		r.Post("/client/send", handlerSendClient)
@@ -45,7 +55,7 @@ func (s *server) strapRouter() {
 	// s.ar.Get("/", handleNoContent)
 	SetAdminPath("/")
 	s.ar.Group(func(r chi.Router) {
-		r.Use(staffio.Middleware(staffio.WithRefresh(), staffio.WithURI(staffio.LoginPath)))
+		r.Use(authzr.MiddlewareWordy(true))
 		r.Get("/", handlerHome)
 		r.Get("/status{idx}", handlerStatus)
 		r.Get("/status", handlerStatus)

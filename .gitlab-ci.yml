@@ -7,15 +7,15 @@ stages:
   - release
 
 variables:
+  CGO_ENABLED: 0
+  GO111MODULE: on
+  GOPROXY: https://goproxy.cn,direct
+  GOPRIVATE: fhyx.tech
   OVPN_EASYRSA_PKI: /build/test
 
 before_script:
   # GO ENV
   - export GOPATH=${CI_PROJECT_DIR}/vendor/go
-  - export CGO_ENABLED=0
-  - export GO111MODULE=on
-  - export GOPROXY=https://goproxy.cn,direct
-  - export GOPRIVATE=fhyx.tech
   - which go
   - go version
   - go env
