@@ -1,4 +1,4 @@
-image: fhyx/golang:1.13.10
+image: fhyx/golang:1.15.2
 
 stages:
   - deps
@@ -7,8 +7,8 @@ stages:
   - release
 
 variables:
-  CGO_ENABLED: 0
-  GO111MODULE: on
+  CGO_ENABLED: '0'
+  GO111MODULE: 'on'
   GOPROXY: https://goproxy.cn,direct
   GOPRIVATE: fhyx.tech
   OVPN_EASYRSA_PKI: /build/test
