@@ -1,4 +1,4 @@
-image: fhyx/golang:1.15.2
+image: fhyx/golang:stab
 
 stages:
   - deps

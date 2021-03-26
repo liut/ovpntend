@@ -4,9 +4,9 @@ go 1.12
 
 require (
 	fhyx.tech/gopak/binding v0.1.1
-	fhyx.tech/gopak/lib v0.1.20
+	fhyx.tech/gopak/lib v0.2.0
 	github.com/ThomasRooney/gexpect v0.0.0-20161231170123-5482f0350944
-	github.com/go-chi/chi v4.1.1+incompatible
+	github.com/go-chi/chi v1.5.4
 	github.com/go-chi/render v1.0.1
 	github.com/go-mail/mail v2.3.1+incompatible
 	github.com/go-playground/assert v1.2.1 // indirect

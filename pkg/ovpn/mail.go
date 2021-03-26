@@ -13,6 +13,7 @@ import (
 
 // vars
 var (
+	ErrInvalidName  = errors.New("invalid name")
 	ErrEmptyConfig  = errors.New("empty config")
 	ErrInvalidOS    = errors.New("invalid os")
 	ErrMailTemplate = errors.New("mail template read fail")
@@ -29,6 +30,9 @@ func ParseOSCat(osc string) bool {
 
 // SendConfig ...
 func SendConfig(ctx context.Context, name, oscat string) error {
+	if !IsValidName(name) {
+		return ErrInvalidName
+	}
 	body, err := GetClientConfig(ctx, name)
 	if err != nil {
 		return err

@@ -40,6 +40,10 @@ type Config struct {
 	MailSenderEmail    string `envconfig:"SMTP_SENDER_EMAIL"`
 	MailSenderPassword string `envconfig:"SMTP_SENDER_PASSWORD"`
 	MailTLSEnabled     bool   `envconfig:"SMTP_TLS" default:"true"`
+
+	ValidMailDomains []string `envconfig:"VALID_MAIL_DOMAINS"`
+
+	RedisURI string `envconfig:"REDIS_URI" default:"redis://localhost:6379/1"`
 }
 
 func init() {

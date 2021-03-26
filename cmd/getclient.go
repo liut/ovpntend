@@ -41,13 +41,16 @@ func init() {
 	RootCmd.AddCommand(getclientCmd)
 
 	getclientCmd.Flags().StringP("name", "n", "", "A special client name")
-	getclientCmd.Flags().StringP("out", "o", "", "A directory for output")
-
+	getclientCmd.Flags().StringP("out", "w", "", "A directory for output")
+	getclientCmd.Flags().BoolP("sendmail", "s", false, "send a email to client name")
+	getclientCmd.Flags().String("os", "mac", "OS category")
 }
 
 func getclientRun(cmd *cobra.Command, args []string) {
 	name, _ := cmd.Flags().GetString("name")
 	out, _ := cmd.Flags().GetString("out")
+	sendmail, _ := cmd.Flags().GetBool("sendmail")
+	oscat, _ := cmd.Flags().GetString("os")
 
 	if 0 == len(name) || 0 == len(out) {
 		logger().Infow("empty name or output directory")
@@ -56,6 +59,15 @@ func getclientRun(cmd *cobra.Command, args []string) {
 	}
 
 	ctx := context.Background()
+	if sendmail {
+		if err := ovpn.SendConfig(ctx, name, oscat); err != nil {
+			logger().Warnw("sendmail fail", "err", err)
+		} else {
+			logger().Infow("sendmail OK")
+		}
+		return
+	}
+
 	body, err := ovpn.GetClientConfig(ctx, name)
 	if err != nil {
 		logger().Infow("get fail", "err", err)

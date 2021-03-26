@@ -3,6 +3,7 @@ package ovpn
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"fhyx.tech/platform/ovpntend/pkg/settings"
 )
@@ -53,4 +54,24 @@ func init() {
 	if serverPlace != "" {
 		ssuffix = "-" + serverPlace
 	}
+}
+
+func IsValidName(name string) bool {
+	if 0 == len(name) {
+		return false
+	}
+	return IsValidEmail(name)
+}
+
+func IsValidEmail(email string) bool {
+	if len(settings.Current.ValidMailDomains) == 0 {
+		return true
+	}
+
+	for _, domain := range settings.Current.ValidMailDomains {
+		if strings.HasSuffix(email, "@"+domain) {
+			return true
+		}
+	}
+	return false
 }
