@@ -7,10 +7,14 @@ stages:
   - release
 
 variables:
+  DEPLOY_HOST: static-pub
+  DEPLOY_USER: sa
   CGO_ENABLED: '0'
   GO111MODULE: 'on'
   GOPROXY: https://goproxy.cn,direct
   GOPRIVATE: fhyx.tech
+  NAME: ovpntend
+  ROOF: fhyx.tech/platform/ovpntend
   OVPN_EASYRSA_PKI: /build/test
 
 before_script:
@@ -21,8 +25,6 @@ before_script:
   - go env
 
   # Builds
-  - export NAME=ovpntend
-  - export ROOF=fhyx.tech/platform/ovpntend
   - export DATE=$(date '+%Y%m%d')
   - export TAG="${DATE}-${CI_JOB_ID}"
   - export LDFLAGS="-X ${ROOF}/cmd.built=${DATE} -X ${ROOF}/cmd.name=${NAME} -X ${ROOF}/cmd.version=${TAG} -X ${ROOF}/settings.version=${TAG}"
@@ -34,6 +36,7 @@ before_script:
   - (echo "$SSH_PRIVATE_KEY") > ~/.ssh/id_ecdsa
   - chmod 0600 ~/.ssh/id_ecdsa
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  - echo -e "Host ${DEPLOY_HOST:-earth}\n\tPort ${DEPLOY_PORT:-22}\n\tUser ${DEPLOY_USER:-sa}\n\n" >> ~/.ssh/config
 
   - git config --global url."git@git.fhyx.tech:".insteadOf "https://git.fhyx.tech/"
 
@@ -73,11 +76,10 @@ release:
   stage: release
   services: []
   script:
-    - echo -e "Host ${DEPLOY_HOST:-vesta}\n\tPort ${DEPLOY_PORT:-13800}\n\tUser ${DEPLOY_USER:-sa}\n\n" >> ~/.ssh/config
     - mkdir -p dist/linux_amd64
     - GOOS=linux GOARCH=amd64 go build -ldflags "${LDFLAGS} -s -w" -o dist/linux_amd64/${NAME} ${CI_PROJECT_DIR}
     - ls dist/linux_amd64 | xargs tar -cvJf ${NAME}-linux-amd64-${TAG}.tar.xz -C dist/linux_amd64
-    - scp *-linux-amd64-*.tar.?z "${DEPLOY_HOST:-vesta}:/var/opt/gopkg/"
+    - scp *-linux-amd64-*.tar.?z "${DEPLOY_HOST}:/var/opt/gopkg/"
   artifacts:
     name: "${CI_JOB_STAGE}_${CI_JOB_ID}"
     paths:
