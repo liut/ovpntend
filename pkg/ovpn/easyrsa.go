@@ -3,6 +3,7 @@ package ovpn
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io/ioutil"
 	"path"
 	"text/template"
@@ -51,8 +52,8 @@ func GetClientConfig(ctx context.Context, name string) (out []byte, err error) {
 		"dev":   "tun",
 	}
 	names := map[string]string{
-		"key":  "private/" + name + ".key",
 		"cert": "issued/" + name + ".crt",
+		"key":  "private/" + name + ".key",
 		"ca":   "ca.crt",
 		"dh":   "dh.pem",
 		"ta":   "ta.key",
@@ -63,6 +64,7 @@ func GetClientConfig(ctx context.Context, name string) (out []byte, err error) {
 		b, err = ioutil.ReadFile(path.Join(easyrasPKI, file))
 		if err != nil {
 			logger().Infow("read fail", "file", file, "err", err)
+			err = fmt.Errorf("file %q not found", file)
 			return
 		}
 		logger().Debugw("read ok", "file", file)

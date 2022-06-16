@@ -7,8 +7,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-
-	"fhyx.tech/gopak/binding"
+	"github.com/marcsv/go-binder/binder"
 
 	"fhyx.tech/platform/ovpntend/pkg/ovpn"
 	"fhyx.tech/platform/ovpntend/pkg/settings"
@@ -79,24 +78,28 @@ func handlerStatus(w http.ResponseWriter, r *http.Request) {
 	switch render.GetAcceptedContentType(r) {
 	case render.ContentTypeJSON:
 		render.JSON(w, r, render.M{"status": 0, "clients": result.ClientList, "name": result.Label})
-		break
 	case render.ContentTypeHTML:
 		renderHTML(w, r, "status.html", render.M{"status": result})
-		break
+	default:
+		w.WriteHeader(http.StatusNotImplemented)
 	}
-	w.WriteHeader(http.StatusNotImplemented)
 }
 
 type getClientParam struct {
-	Name  string `json:"name"`
-	OSCat string `json:"oscat"`
+	Name  string `form:"name" json:"name"`
+	Host  string `form:"host" json:"host"`
+	OSCat string `form:"oscat" json:"oscat"`
 }
 
 func handlerSendClient(w http.ResponseWriter, r *http.Request) {
 	param := new(getClientParam)
-	if err := binding.Bind(r, param); err != nil {
-		http.Error(w, err.Error(), 400)
+	if err := binder.BindBody(r, param); err != nil {
+		http.Error(w, "decode fail: "+err.Error(), 400)
 		return
+	}
+
+	if len(param.Host) > 0 {
+		param.Name = param.Name + "@" + param.Host
 	}
 
 	if err := ovpn.SendConfig(r.Context(), param.Name, param.OSCat); err != nil {
@@ -111,7 +114,11 @@ func handlerSendClient(w http.ResponseWriter, r *http.Request) {
 func handlerHome(w http.ResponseWriter, r *http.Request) {
 	data := render.M{
 		"action":  URLFor("client/send"),
-		"domains": []string{"phoenixtv.com"},
+		"domains": settings.Current.ValidMailDomains,
 	}
 	renderHTML(w, r, "home.html", data)
+}
+
+func handleRoutes(w http.ResponseWriter, r *http.Request) {
+	renderHTML(w, r, "route-customize.html", render.M{})
 }

@@ -12,10 +12,11 @@ DATE := $(shell date '+%Y%m%d')
 TAG:=$(shell git describe --tags --always)
 LDFLAGS:=-X $(ROOF)/cmd.built=$(DATE) -X $(ROOF)/cmd.name=$(NAME) -X $(ROOF)/cmd.version=$(TAG) -X $(ROOF)/settings.version=$(TAG)-$(DATE)
 GO=$(shell which go)
+GOMOD=$(shell echo "$${GO111MODULE:-auto}")
 
 main: vet
 	@echo "Building $(NAME)"
-	@$(GO) build -ldflags="$(LDFLAGS)" $(ROOF)
+	@GO111MODULE=$(GOMOD) $(GO) build -ldflags="$(LDFLAGS)" $(ROOF)
 
 all: dist package
 
@@ -26,7 +27,7 @@ dep: vet ## Download and install dependencies
 
 vet: ## Run go vet over sources
 	echo "Checking ./pkg ./cmd"
-	CGO_ENABLED=0 $(GO) vet -all ./pkg/... ./cmd...
+	GO111MODULE=$(GOMOD) CGO_ENABLED=0 $(GO) vet -all ./pkg/... ./cmd...
 
 clean: ## Clean built
 	@echo "Cleaning dist"
@@ -36,11 +37,11 @@ clean: ## Clean built
 
 dist/linux_amd64/$(NAME): $(SOURCES)
 	echo "Building $(NAME) of linux"
-	mkdir -p dist/linux_amd64 && GOOS=linux GOARCH=amd64 $(GO) build -ldflags "$(LDFLAGS) -s -w" -o dist/linux_amd64/$(NAME) .
+	mkdir -p dist/linux_amd64 && GO111MODULE=$(GOMOD) GOOS=linux GOARCH=amd64 $(GO) build -ldflags "$(LDFLAGS) -s -w" -o dist/linux_amd64/$(NAME) .
 
 dist/darwin_amd64/$(NAME): $(SOURCES)
 	echo "Building $(NAME) of darwin"
-	mkdir -p dist/darwin_amd64 && GOOS=darwin GOARCH=amd64 $(GO) build -ldflags "$(LDFLAGS) -w" -o dist/darwin_amd64/$(NAME) .
+	mkdir -p dist/darwin_amd64 && GO111MODULE=$(GOMOD) GOOS=darwin GOARCH=amd64 $(GO) build -ldflags "$(LDFLAGS) -w" -o dist/darwin_amd64/$(NAME) .
 
 dist: vet dist/linux_amd64/$(NAME) dist/darwin_amd64/$(NAME) ## Build all distributions
 
@@ -58,12 +59,9 @@ test-status:
 	gulp build
 	touch $@
 
-pkg/assets/files.go: $(ASSETS) .ui-build
+ui/fs.go: $(ASSETS) .ui-build
 	echo 'Resource embedding with staticfiles'
-	staticfiles -package assets -o $(@) ui
 	touch $@
-
-assets: pkg/assets/files.go  ## Built assets of UI staticfiles
 
 
 help: ## Show this info
@@ -71,4 +69,4 @@ help: ## Show this info
 	grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[33m%-12s\033[0m %s\n", $$1, $$2}'
 	printf ''
-	printf '\n\033[90mBuilt by FHYX 2020\033[0m\n'
+	printf '\n\033[90mBuilt by liut 2020\033[0m\n'

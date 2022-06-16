@@ -52,7 +52,7 @@ func getclientRun(cmd *cobra.Command, args []string) {
 	sendmail, _ := cmd.Flags().GetBool("sendmail")
 	oscat, _ := cmd.Flags().GetString("os")
 
-	if 0 == len(name) || 0 == len(out) {
+	if 0 == len(name) || 0 == len(out) && !sendmail {
 		logger().Infow("empty name or output directory")
 		cmd.Usage()
 		return

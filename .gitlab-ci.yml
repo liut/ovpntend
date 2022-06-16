@@ -1,7 +1,6 @@
 image: fhyx/golang:stab
 
 stages:
-  - deps
   - lint
   - test
   - release
@@ -12,7 +11,7 @@ variables:
   CGO_ENABLED: '0'
   GO111MODULE: 'on'
   GOPROXY: https://goproxy.cn,direct
-  GOPRIVATE: fhyx.tech
+  GOPRIVATE: daxv.cn,hyyl.xyz
   NAME: ovpntend
   ROOF: fhyx.tech/platform/ovpntend
   OVPN_EASYRSA_PKI: /build/test
@@ -38,39 +37,18 @@ before_script:
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   - echo -e "Host ${DEPLOY_HOST:-earth}\n\tPort ${DEPLOY_PORT:-22}\n\tUser ${DEPLOY_USER:-sa}\n\n" >> ~/.ssh/config
 
-  - git config --global url."git@git.fhyx.tech:".insteadOf "https://git.fhyx.tech/"
-
-.modcache: &modcache
-  key: modcache1
-  paths:
-    - vendor/go/pkg/mod
-
-deps:
-  stage: deps
-  script:
-    - test -d $GOPATH/pkg/mod && ls -al $GOPATH/pkg/mod
-    # - go get -v fhyx.tech/gopak/binding
-    # - go list -m -json -versions fhyx.tech/gopak/binding
-    - ls -al /cache/
-    - go mod download
-  cache: *modcache
+  - git config --global url."git@git.hyyl.xyz:".insteadOf "https://git.hyyl.xyz/"
 
 test-lint:
   stage: lint
   services: []
   script:
     - go vet -all ./cmd/... ./pkg/...
-  cache:
-    <<: *modcache
-    policy: pull
 
 test-status:
   stage: test
   script:
     - go test -v -cover ./pkg/status
-  cache:
-    <<: *modcache
-    policy: pull
 
 release:
   stage: release
@@ -87,7 +65,4 @@ release:
   only:
     - master@platform/ovpntend
   when: on_success
-  cache:
-    <<: *modcache
-    policy: pull
 

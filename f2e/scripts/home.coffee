@@ -4,13 +4,14 @@ window.jQuery = $  # Orz....... for trouble of bootstrap
 
 require 'bootstrap'
 require 'bootstrap-select'
-require 'basil'
+require 'basil.js/build/basil.js'
+require 'bootstrap-validator'
 
 $ ->
   $('.j-select').selectpicker()
 
 $ ->
-  basil = window.Basil()
+  basil = new window.Basil()
 
   submitButton = $('.j-submit')
   submitButton.data('value', submitButton.val())
@@ -35,3 +36,17 @@ $ ->
     counter = 60
     basil.set('counter', counter)
     start()
+
+$ ->
+  $('#form1').validator().on 'submit', (e) ->
+    if e.isDefaultPrevented()
+      # handle the invalid form...
+      console.log(e)
+    else
+      # everything looks good!
+      # console.log(e)
+      data = {name: $('#emailName').val(), host: $('#emailHost').val(), oscat: $('input[name=oscat]:radio').val()}
+      $.post e.target.action, data, (res) ->
+        console.log(res)
+
+    return false

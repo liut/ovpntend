@@ -3,7 +3,6 @@ package status
 import (
 	"bytes"
 	"io"
-	"log"
 	"net"
 	"time"
 )
@@ -50,7 +49,7 @@ func ParseAddr(management string) (*Status, error) {
 		n, err = conn.Read(buf)
 		if err != nil {
 			if err != io.EOF {
-				log.Printf("read error: %s", err)
+				logger().Infow("read fail", "err", err)
 			}
 			break
 		}
@@ -63,7 +62,7 @@ func ParseAddr(management string) (*Status, error) {
 		}
 	}
 
-	log.Printf("ovpn parsed %d", data.Len())
+	logger().Infow("ovpn parsed", "data-len", data.Len())
 	// log.Printf("parsed %s", data)
 	return Parse(bytes.NewReader(data.Bytes()))
 }

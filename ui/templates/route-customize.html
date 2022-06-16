@@ -1,10 +1,18 @@
-{%- extends 'base.html' %}
+{{ define "title" }}Routes{{ end }}
+{{ define "head" }}
+<style>
+  li {
+    line-height: 1.75;
+  }
+</style>
+{{ end }}
 
-{%- block body %}
+{{ define "content" }}
+
   <div class="clearfix page-guide">
     <h2 class="pull-left">自定义路由表</h2>
     <div class="pull-right btn-return">
-      <a href="{{ url_for('.home') }}" class="btn btn-default">返回</a>
+          <a href="status" class="btn btn-default">状态</a>
     </div>
   </div>
   <hr>
@@ -20,7 +28,7 @@
     <li>用文本编辑器打开邮箱中下载的 OpenVPN 配置 (文件名以 <code>.ovpn</code> 结尾)</li>
     <li>如果将文件最后一行为 <code>redirect-gateway def1</code>, 则更改为 <code># redirect-gateway def1</code> (在开头添加了 <code># </code>)</li>
     <li>
-      在文件最后另起一行, 以如下格式（<code>route IP 子网掩码 转发方式</code>）加入转发配置：
+      在文件最后另起一行, 以如下格式（<code>route IP 子网掩码 转发方式</code>）加入转发配置。示例：
       <pre>
 route 0.0.0.0         0.0.0.0         net_gateway
 route 114.113.229.218 255.255.255.255 net_gateway
@@ -33,4 +41,7 @@ route 172.17.0.0      255.255.0.0     vpn_gateway</pre>
       如果手动设置过系统 DNS 服务器, 需要修改为系统自动获取, 否则 OpenVPN 推送的 DNS 服务器无法生效, 内部网站的域名将无法正确解析。
     </li>
   </ol>
-{%- endblock %}
+{{ end }}
+{{ define "tail" }}
+{{ end }}
+

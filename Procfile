@@ -1,2 +1,2 @@
-svc: rerun -goexec=${GOEXEC} -build -watch ./pkg fhyx.tech/platform/ovpntend web
+svc: rerun -goexec=${GOEXEC} -rundir dist -build -watch ./pkg fhyx.tech/platform/ovpntend web
 fe: gulp watch

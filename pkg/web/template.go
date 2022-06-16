@@ -11,11 +11,11 @@ import (
 
 	"github.com/go-chi/render"
 
-	"fhyx.tech/gopak/lib/util"
+	"daxv.cn/gopak/lib/util"
 
-	"fhyx.tech/platform/ovpntend/pkg/assets"
 	"fhyx.tech/platform/ovpntend/pkg/ipip"
 	"fhyx.tech/platform/ovpntend/pkg/settings"
+	"fhyx.tech/platform/ovpntend/ui"
 )
 
 var (
@@ -74,11 +74,13 @@ func tpl(name string) *template.Template {
 			filepath.Join("ui/templates", name),
 		))
 	} else {
-		tmp, err := t.Parse(assets.Data("templates/_base.html"))
+		_base, _ := ui.Load("templates/_base.html")
+		tmp, err := t.Parse(_base)
 		if err != nil {
 			panic(err)
 		}
-		tmp, err = tmp.Parse(assets.Data("templates/" + name))
+		text, _ := ui.Load("templates/" + name)
+		tmp, err = tmp.Parse(text)
 		if err != nil {
 			panic(err)
 		}

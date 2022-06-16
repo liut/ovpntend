@@ -1,0 +1,8 @@
+TITLE,OpenVPN 2.5.1 x86_64-pc-linux-gnu [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [PKCS11] [MH/PKTINFO] [AEAD] built on May 14 2021
+TIME,2022-06-17 00:03:19,1655395399
+HEADER,CLIENT_LIST,Common Name,Real Address,Virtual Address,Virtual IPv6 Address,Bytes Received,Bytes Sent,Connected Since,Connected Since (time_t),Username,Client ID,Peer ID,Data Channel Cipher
+CLIENT_LIST,liut@abc.xyz,111.197.233.76:15369,192.168.251.167,,69525429,45088426,2022-06-16 20:51:55,1655383915,UNDEF,4,0,AES-256-GCM
+HEADER,ROUTING_TABLE,Virtual Address,Common Name,Real Address,Last Ref,Last Ref (time_t)
+ROUTING_TABLE,d2:59:de:c4:8c:72@0,liut@abc.xyz,111.197.233.76:15369,2022-06-17 00:03:19,1655395399
+GLOBAL_STATS,Max bcast/mcast queue length,0
+END

@@ -1,10 +1,25 @@
 package status
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+
+	"fhyx.tech/platform/ovpntend/pkg/zlog"
 )
+
+func TestMain(m *testing.M) {
+	lgr, _ := zap.NewDevelopment()
+	defer func() {
+		_ = lgr.Sync() // flushes buffer, if any
+	}()
+	sugar := lgr.Sugar()
+	zlog.Set(sugar)
+
+	os.Exit(m.Run())
+}
 
 func TestBadFile(t *testing.T) {
 	s, _ := ParseFile("examples/badFile.txt")
@@ -22,7 +37,11 @@ func TestUnableParse(t *testing.T) {
 }
 
 func TestLogStatus(t *testing.T) {
-	s, _ := ParseFile("examples/log_status.txt")
+	s, err := ParseFile("examples/log_status.txt")
+	assert.NoError(t, err)
+	assert.Equal(t, s.Result, "OK")
+	s, err = ParseFile("examples/status.txt")
+	assert.NoError(t, err)
 	assert.Equal(t, s.Result, "OK")
 }
 

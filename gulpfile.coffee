@@ -3,6 +3,7 @@ uglify     = require 'gulp-uglify'
 sourcemaps = require 'gulp-sourcemaps'
 stylus     = require 'gulp-stylus'
 rename     = require 'gulp-rename'
+gutil      = require 'gulp-util'
 source     = require 'vinyl-source-stream'
 buffer     = require 'vinyl-buffer'
 browserify = require 'browserify'
@@ -21,34 +22,30 @@ paths =
   ]
   images: [
   ]
-  dest: './ui/static/'
+  static: './ui/static/'
 
-gulp.task 'build', ['build:scripts', 'build:stylesheets', 'build:images']
-
-gulp.task 'build:scripts', () ->
+gulp.task 'build:scripts', gulp.series () ->
   browserify(entries: paths.scripts, debug: true).bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init(loadMaps: false))
-    .pipe(uglify())
+    .pipe(uglify().on('error', gutil.log))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.dest))
+    .pipe(gulp.dest(paths.static))
 
-gulp.task 'build:stylesheets', () ->
+gulp.task 'build:stylesheets', gulp.series () ->
   gulp.src(paths.stylesheets)
     .pipe(sourcemaps.init(loadMaps: false))
     .pipe(stylus(compress: true, paths: paths.stylus, 'include css': true))
     .pipe(rename('bundle.css'))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.dest))
+    .pipe(gulp.dest(paths.static))
 
-gulp.task 'build:images', () ->
-  gulp.src(paths.images)
-    .pipe(gulp.dest(paths.dest))
+gulp.task 'build', gulp.parallel ['build:scripts', 'build:stylesheets']
 
-gulp.task 'watch', ['build'], () ->
-  gulp.watch(paths.scripts, ['build:scripts'])
-  gulp.watch(paths.stylesheets, ['build:stylesheets'])
+gulp.task 'watch', gulp.series ['build'], () ->
+  gulp.watch paths.scripts, gulp.series ['build:scripts']
+  gulp.watch paths.stylesheets, gulp.series ['build:stylesheets']
 
-gulp.task 'clean', (cb) ->
-  del([paths.dest + '*.{js,css,png}'], cb)
+gulp.task 'clean', gulp.series (cb) ->
+  del([paths.static + '*.{js,css,png}'], cb)

@@ -1,4 +1,4 @@
-{{ define "title" }}Login{{ end }}
+{{ define "title" }}Home{{ end }}
 {{ define "head" }}
 {{ end }}
 
@@ -17,18 +17,17 @@
   </div>
   <hr>
 
-  <form class="form-horizontal center-block certificate-form" action="{{ .action }}" method="post">
+  <form class="form-horizontal center-block certificate-form" action="{{ .action }}" method="post" role="form" data-toggle="validator" id="form1">
 
     <div class="form-group">
       <label class="control-label" for="emailName">工作邮箱</label>
       <div class="input-group">
-        <input class="form-control" id="emailName" name="emailName" type="text" value="">
+        <input class="form-control" id="emailName" name="name" type="text" value="" data-minlength="3" required>
         <span class="input-group-addon">@</span>
-        <select class="form-control j-select" id="emailHost" name="emailHost">
-          <option value="phoenixtv.com">phoenixtv.com</option>
-          <!-- <option value="cloudifeng.com">cloudifeng.com</option>
-          <option value="phoenixincloud.com">phoenixincloud.com</option>
-          <option value="phoenixincloud.net">phoenixincloud.net</option> -->
+        <select class="form-control j-select" id="emailHost" name="host">
+          {{ range .domains }}
+          <option value="{{ . }}">{{ . }}</option>
+          {{ end }}
         </select>
       </div>
     </div>
@@ -36,9 +35,9 @@
     <div class="form-group">
       <label class="control-label">操作系统: </label>
       <div class=" input-group">
-        <label class="input-group-addon"><input type="radio" name="clientOS" aria-label="Windwos" value="windwos"> Windwos </label>
-        <label class="input-group-addon"><input type="radio" name="clientOS" aria-label="macOS" value="mac"> macOS </label>
-        <label class="input-group-addon"><input type="radio" name="clientOS" aria-label="Linux" value="linux"> Linux </label>
+        <label class="input-group-addon"><input type="radio" name="oscat" aria-label="Windwos" value="windwos" checked> Windwos </label>
+        <label class="input-group-addon"><input type="radio" name="oscat" aria-label="macOS" value="mac"> macOS </label>
+        <label class="input-group-addon"><input type="radio" name="oscat" aria-label="Linux" value="linux"> Linux </label>
     </div>
 
     <br>
@@ -51,7 +50,7 @@
     <a class="btn btn-default" href="client_guide/linux">Linux</a>
     <a class="btn btn-default" href="client_guide/darwin">Mac</a>
     <a class="btn btn-default" href="client_guide/windows">Windows</a>
-    <a class="btn btn-default" href="route_customize">自定义路由表</a>
+    <a class="btn btn-default" href="route-customize">自定义路由表</a>
   </footer>
 {{ end }}
 {{ define "tail" }}

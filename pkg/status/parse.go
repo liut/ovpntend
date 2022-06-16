@@ -55,13 +55,14 @@ func Parse(rd io.Reader) (*Status, error) {
 		} else if fields[0] == "" {
 
 		} else if checkHeaders(fields) == clientListHeaders {
+			logger().Debugw("found client header")
 			judgeFileType = clientListHeaders
-		} else if judgeFileType == clientListHeaders && len(fields) == len(clientListHeaderColumns)-1 {
+		} else if judgeFileType == clientListHeaders && len(fields) >= len(clientListHeaderColumns)-1 {
 			ct, err = time.ParseInLocation(dateLayout, fields[7], time.Local)
 			if err != nil {
 				logger().Infow("parse time fail", "err", err)
 			} else {
-				logger().Debugw("parsed", "t", ct, "since", time.Since(ct))
+				logger().Debugw("parsed client", "t", ct, "since", time.Since(ct))
 			}
 			host, port, _ := net.SplitHostPort(fields[2])
 			clients = append(clients, Client{
@@ -72,11 +73,14 @@ func Parse(rd io.Reader) (*Status, error) {
 		} else if fields[0] == "" {
 
 		} else if checkHeaders(fields) == routingTableHeaders {
+			logger().Debugw("found routing header")
 			judgeFileType = routingTableHeaders
-		} else if judgeFileType == routingTableHeaders && len(fields) == len(routingTableHeadersColumns)-1 {
+		} else if judgeFileType == routingTableHeaders && len(fields) >= len(routingTableHeadersColumns)-1 {
 			rt, err = time.ParseInLocation(dateLayout, fields[4], time.Local)
 			if err != nil {
 				logger().Infow("parse time fail", "err", err)
+			} else {
+				logger().Debugw("parsed routing", "t", ct, "since", time.Since(ct))
 			}
 			routingTable = append(routingTable, Routing{fields[1], fields[2], fields[3], &rt, Atoi(fields[5])})
 		} else if fields[0] == "GLOBAL_STATS" {
@@ -94,6 +98,7 @@ func Parse(rd io.Reader) (*Status, error) {
 				break
 			}
 		} else {
+			logger().Infow("parse fail", "fields", fields)
 			return &Status{Result: "Unable to Parse Status "}, err
 		}
 	}

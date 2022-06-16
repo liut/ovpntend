@@ -9,8 +9,6 @@ Display OpenVPN connnecting status and certificates management
 
 gulp build
 
-make assets
-
 ```
 
 ## build and deploy

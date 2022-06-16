@@ -59,6 +59,7 @@ func (s *server) strapRouter() {
 		r.Get("/", handlerHome)
 		r.Get("/status{idx}", handlerStatus)
 		r.Get("/status", handlerStatus)
+		r.Get("/route-customize", handleRoutes)
 	})
 
 }

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"fhyx.tech/gopak/lib/zlog"
+	"fhyx.tech/platform/ovpntend/pkg/zlog"
 )
 
 func logger() zlog.Logger {

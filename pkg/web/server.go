@@ -10,7 +10,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 
-	"fhyx.tech/platform/ovpntend/pkg/assets"
+	"fhyx.tech/platform/ovpntend/ui"
 )
 
 type server struct {
@@ -35,19 +35,7 @@ func New(debug bool, addr string) interface {
 	s := &server{Addr: addr, ar: ar}
 	s.strapRouter()
 
-	if debug {
-		s.ar.NotFound(http.FileServer(http.Dir("./ui")).ServeHTTP)
-	} else {
-		s.ar.NotFound(assets.ServeHTTP)
-		// s.ar.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		// 	if strings.HasPrefix(r.RequestURI, "/static") {
-		// 		assets.ServeHTTP(w, r)
-		// 		return
-		// 	}
-		// 	logger().Infow("not found", "uri", r.RequestURI)
-		// 	http.NotFound(w, r)
-		// })
-	}
+	s.ar.NotFound(http.FileServer(ui.FS()).ServeHTTP)
 
 	s.hs = &http.Server{
 		Addr:    s.Addr,

@@ -1,5 +1,8 @@
 package status
 
+// Time Parse
+const dateLayout = "2006-01-02 15:04:05"
+
 var clientListHeaderColumns = []string{
 	"HEADER",
 	"CLIENT_LIST",
@@ -34,8 +37,11 @@ const (
 )
 
 func checkClientListHeader(headers []string) bool {
-	for i, v := range headers {
-		if v != clientListHeaderColumns[i] {
+	if len(headers) < len(clientListHeaderColumns) {
+		return false
+	}
+	for i, v := range clientListHeaderColumns {
+		if v != headers[i] {
 			return false
 		}
 	}
@@ -43,8 +49,11 @@ func checkClientListHeader(headers []string) bool {
 }
 
 func checkRoutingTableHeader(headers []string) bool {
-	for i, v := range headers {
-		if v != routingTableHeadersColumns[i] {
+	if len(headers) < len(routingTableHeadersColumns) {
+		return false
+	}
+	for i, v := range routingTableHeadersColumns {
+		if v != headers[i] {
 			return false
 		}
 	}
@@ -60,6 +69,3 @@ func checkHeaders(headers []string) int {
 		return 0
 	}
 }
-
-// Time Parse
-const dateLayout = "Mon Jan _2 15:04:05 2006"
