@@ -43,9 +43,9 @@ func SendConfig(ctx context.Context, name, oscat string) error {
 	}
 	logger().Infow("read client body", "bytes", len(body))
 
-	tpl, _ := ui.Load("mail/" + oscat + ".htm")
-	if 0 == len(tpl) {
-		logger().Infow("mail data empty", "osc", oscat)
+	tpl, err := ui.Load("mail/" + oscat + ".htm")
+	if err != nil {
+		logger().Infow("mail data empty", "name", name, "osc", oscat, "err", err)
 		return ErrMailTemplate
 	}
 

@@ -6,7 +6,7 @@ stages:
   - release
 
 variables:
-  DEPLOY_HOST: static-pub
+  DEPLOY_HOST: vesta
   DEPLOY_USER: sa
   CGO_ENABLED: '0'
   GO111MODULE: 'on'

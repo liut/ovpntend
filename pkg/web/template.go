@@ -74,13 +74,12 @@ func tpl(name string) *template.Template {
 			filepath.Join("ui/templates", name),
 		))
 	} else {
-		_base, _ := ui.Load("templates/_base.html")
-		tmp, err := t.Parse(_base)
+		tmp, err := t.ParseFS(ui.FS(), "templates/_base.html")
 		if err != nil {
 			panic(err)
 		}
-		text, _ := ui.Load("templates/" + name)
-		tmp, err = tmp.Parse(text)
+
+		tmp, err = tmp.ParseFS(ui.FS(), "templates/"+name)
 		if err != nil {
 			panic(err)
 		}

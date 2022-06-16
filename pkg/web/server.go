@@ -35,7 +35,7 @@ func New(debug bool, addr string) interface {
 	s := &server{Addr: addr, ar: ar}
 	s.strapRouter()
 
-	s.ar.NotFound(http.FileServer(ui.FS()).ServeHTTP)
+	s.ar.NotFound(ui.Handler().ServeHTTP)
 
 	s.hs = &http.Server{
 		Addr:    s.Addr,

@@ -5,9 +5,8 @@ import (
 	"net/http"
 )
 
-//go:embed mail/*.htm
-//go:embed static/*.css
-//go:embed static/*.js
+//go:embed mail/*
+//go:embed static/*.css static/*.js
 //go:embed templates/*
 var uifs embed.FS
 
@@ -19,6 +18,10 @@ func Load(name string) (string, error) {
 	}
 }
 
-func FS() http.FileSystem {
-	return http.FS(uifs)
+func FS() embed.FS {
+	return uifs
+}
+
+func Handler() http.Handler {
+	return http.FileServer(http.FS(uifs))
 }
