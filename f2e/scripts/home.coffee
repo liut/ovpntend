@@ -45,6 +45,7 @@ $ ->
     else
       # everything looks good!
       # console.log(e)
+      $('#submit').prop('disabled')
       data = {
         name: $('#emailName').val(),
         host: $('#emailHost').val(),

@@ -6,11 +6,11 @@ stages:
   - release
 
 variables:
-  DEPLOY_HOST: vesta
+  DEPLOY_HOST: earth
   DEPLOY_USER: sa
   CGO_ENABLED: '0'
   GO111MODULE: 'on'
-  GOPROXY: https://goproxy.cn,direct
+  GOPROXY: https://goproxy.io,direct
   GOPRIVATE: daxv.cn,hyyl.xyz
   NAME: ovpntend
   ROOF: fhyx.tech/platform/ovpntend

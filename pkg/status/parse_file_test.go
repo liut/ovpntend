@@ -37,10 +37,10 @@ func TestUnableParse(t *testing.T) {
 }
 
 func TestLogStatus(t *testing.T) {
-	s, err := ParseFile("examples/log_status.txt")
+	s, err := ParseFile("examples/status-24.txt")
 	assert.NoError(t, err)
 	assert.Equal(t, s.Result, "OK")
-	s, err = ParseFile("examples/status.txt")
+	s, err = ParseFile("examples/status-25.txt")
 	assert.NoError(t, err)
 	assert.Equal(t, s.Result, "OK")
 }

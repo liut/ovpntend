@@ -8,7 +8,7 @@ import (
 	"path"
 	"text/template"
 
-	expect "github.com/ThomasRooney/gexpect"
+	expect "github.com/agorer/gexpect"
 )
 
 // CreateCertificate ...
