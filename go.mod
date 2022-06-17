@@ -3,7 +3,6 @@ module fhyx.tech/platform/ovpntend
 go 1.18
 
 require (
-	daxv.cn/gopak/lib v0.3.19
 	github.com/ThomasRooney/gexpect v0.0.0-20161231170123-5482f0350944
 	github.com/go-chi/chi v1.5.4
 	github.com/go-chi/render v1.0.1
@@ -27,7 +26,6 @@ require (
 	github.com/liut/simpauth v0.1.7 // indirect
 	github.com/philhofer/fwd v1.0.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.3 // indirect
 	github.com/tinylib/msgp v1.1.1 // indirect
 	go.uber.org/atomic v1.4.0 // indirect

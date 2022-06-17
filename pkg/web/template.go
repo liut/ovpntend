@@ -1,7 +1,6 @@
 package web
 
 import (
-	// "context"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -10,8 +9,6 @@ import (
 	"time"
 
 	"github.com/go-chi/render"
-
-	"daxv.cn/gopak/lib/util"
 
 	"fhyx.tech/platform/ovpntend/pkg/ipip"
 	"fhyx.tech/platform/ovpntend/pkg/settings"
@@ -62,7 +59,7 @@ func tpl(name string) *template.Template {
 
 	t := template.New("_base.html").Funcs(template.FuncMap{
 		"duration":    time.Since,
-		"formatBytes": FormatBytes,
+		"formatBytes": formatBytes,
 		"findPlace":   FindPlace,
 		"isOffice":    IsOfficeIP,
 		"urlFor":      URLFor,
@@ -126,7 +123,7 @@ func IsOfficeIP(ip string) bool {
 	return false
 }
 
-// FormatBytes ...
-func FormatBytes(num int) string {
-	return util.FormatBytes(float64(num), "")
+// formatBytes ...
+func formatBytes(num int) string {
+	return FormatBytes(float64(num), "")
 }

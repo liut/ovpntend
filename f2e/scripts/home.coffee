@@ -45,8 +45,13 @@ $ ->
     else
       # everything looks good!
       # console.log(e)
-      data = {name: $('#emailName').val(), host: $('#emailHost').val(), oscat: $('input[name=oscat]:checked').val()}
+      data = {
+        name: $('#emailName').val(),
+        host: $('#emailHost').val(),
+        oscat: $('input[name=oscat]:checked').val()
+      }
       $.post e.target.action, data, (res) ->
         console.log(res)
+        alert('ok! please checke your email.')
 
     return false
