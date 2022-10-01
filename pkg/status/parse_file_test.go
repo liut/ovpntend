@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 
-	"fhyx.tech/platform/ovpntend/pkg/zlog"
+	"github.com/liut/ovpntend/pkg/zlog"
 )
 
 func TestMain(m *testing.M) {

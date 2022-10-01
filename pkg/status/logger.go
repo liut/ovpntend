@@ -1,7 +1,7 @@
 package status
 
 import (
-	"fhyx.tech/platform/ovpntend/pkg/zlog"
+	"github.com/liut/ovpntend/pkg/zlog"
 )
 
 func logger() zlog.Logger {

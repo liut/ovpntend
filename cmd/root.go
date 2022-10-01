@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
-	"fhyx.tech/platform/ovpntend/pkg/zlog"
+	"github.com/liut/ovpntend/pkg/zlog"
 )
 
 var RootCmd = &cobra.Command{

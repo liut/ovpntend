@@ -25,8 +25,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"fhyx.tech/platform/ovpntend/pkg/settings"
-	"fhyx.tech/platform/ovpntend/pkg/web"
+	"github.com/liut/ovpntend/pkg/settings"
+	"github.com/liut/ovpntend/pkg/web"
 )
 
 // webCmd represents the web command

@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"fhyx.tech/platform/ovpntend/pkg/settings"
+	"github.com/liut/ovpntend/pkg/settings"
 )
 
 var (

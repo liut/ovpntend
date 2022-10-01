@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-mail/mail"
 
-	"fhyx.tech/platform/ovpntend/ui"
+	"github.com/liut/ovpntend/ui"
 )
 
 // vars

@@ -1,4 +1,4 @@
-module fhyx.tech/platform/ovpntend
+module github.com/liut/ovpntend
 
 go 1.18
 

@@ -20,7 +20,7 @@
 
 package main
 
-import "fhyx.tech/platform/ovpntend/cmd"
+import "github.com/liut/ovpntend/cmd"
 
 func main() {
 	cmd.Execute()

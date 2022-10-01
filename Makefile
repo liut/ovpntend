@@ -4,7 +4,7 @@
 WITH_ENV = env `cat .env 2>/dev/null | xargs`
 
 NAME:=ovpntend
-ROOF:=fhyx.tech/platform/$(NAME)
+ROOF:=github.com/liut/$(NAME)
 SOURCES=$(shell find cmd pkg -type f \( -name "*.go" ! -name "*_test.go" \) -print )
 ASSETS=$(shell find ui -type f)
 FRONTS=$(shell find f2e -type f)

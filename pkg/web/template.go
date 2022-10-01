@@ -10,9 +10,9 @@ import (
 
 	"github.com/go-chi/render"
 
-	"fhyx.tech/platform/ovpntend/pkg/ipip"
-	"fhyx.tech/platform/ovpntend/pkg/settings"
-	"fhyx.tech/platform/ovpntend/ui"
+	"github.com/liut/ovpntend/pkg/ipip"
+	"github.com/liut/ovpntend/pkg/settings"
+	"github.com/liut/ovpntend/ui"
 )
 
 var (

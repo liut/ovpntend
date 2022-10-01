@@ -13,7 +13,7 @@ variables:
   GOPROXY: https://goproxy.io,direct
   GOPRIVATE: daxv.cn,hyyl.xyz
   NAME: ovpntend
-  ROOF: fhyx.tech/platform/ovpntend
+  ROOF: github.com/liut/ovpntend
   OVPN_EASYRSA_PKI: /build/test
 
 before_script:

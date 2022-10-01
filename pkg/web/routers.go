@@ -7,7 +7,7 @@ import (
 
 	staffio "github.com/liut/staffio-client"
 
-	"fhyx.tech/platform/ovpntend/pkg/settings"
+	"github.com/liut/ovpntend/pkg/settings"
 )
 
 // User online user

@@ -27,7 +27,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"fhyx.tech/platform/ovpntend/pkg/ovpn"
+	"github.com/liut/ovpntend/pkg/ovpn"
 )
 
 // getclientCmd represents the getclient command

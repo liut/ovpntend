@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"fhyx.tech/platform/ovpntend/pkg/settings"
+	"github.com/liut/ovpntend/pkg/settings"
 )
 
 // usageCmd represents the usage command

@@ -9,9 +9,9 @@ import (
 	"github.com/go-chi/render"
 	"github.com/marcsv/go-binder/binder"
 
-	"fhyx.tech/platform/ovpntend/pkg/ovpn"
-	"fhyx.tech/platform/ovpntend/pkg/settings"
-	"fhyx.tech/platform/ovpntend/pkg/status"
+	"github.com/liut/ovpntend/pkg/ovpn"
+	"github.com/liut/ovpntend/pkg/settings"
+	"github.com/liut/ovpntend/pkg/status"
 )
 
 func apiError(w http.ResponseWriter, r *http.Request, status int, err interface{}) {

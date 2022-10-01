@@ -10,7 +10,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 
-	"fhyx.tech/platform/ovpntend/ui"
+	"github.com/liut/ovpntend/ui"
 )
 
 type server struct {
