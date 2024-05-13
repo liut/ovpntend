@@ -22,8 +22,8 @@ package cmd
 
 import (
 	"context"
-	"io/ioutil"
 	"log/slog"
+	"os"
 	"path"
 
 	"github.com/spf13/cobra"
@@ -55,7 +55,7 @@ func getclientRun(cmd *cobra.Command, args []string) {
 
 	if 0 == len(name) || 0 == len(out) && !sendmail {
 		slog.Info("empty name or output directory")
-		cmd.Usage()
+		_ = cmd.Usage()
 		return
 	}
 
@@ -76,7 +76,7 @@ func getclientRun(cmd *cobra.Command, args []string) {
 	}
 
 	file := path.Join(out, name+".ovpn")
-	err = ioutil.WriteFile(file, body, 0644)
+	err = os.WriteFile(file, body, 0644)
 	if err != nil {
 		slog.Info("write fail", "err", err)
 		return

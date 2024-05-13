@@ -53,5 +53,5 @@ func init() {
 
 // Usage 显示配置内容
 func Usage() {
-	envconfig.Usage(Name, Current)
+	_ = envconfig.Usage(Name, Current)
 }

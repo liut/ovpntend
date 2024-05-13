@@ -58,7 +58,7 @@ func ParseAddr(management string) (*Status, error) {
 		if n < bodyBufferSize {
 			if pos := bytes.Index(buf[:n], []byte("END")); pos > -1 {
 				// log.Printf("found END at %d", pos)
-				conn.Write([]byte("quit\n"))
+				conn.Write([]byte("quit\n")) //nolint
 				break
 			}
 		}

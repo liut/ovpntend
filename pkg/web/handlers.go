@@ -15,6 +15,7 @@ import (
 	"github.com/liut/ovpntend/pkg/status"
 )
 
+// nolint
 func apiError(w http.ResponseWriter, r *http.Request, status int, err interface{}) {
 	res := render.M{
 		"status": status,
@@ -80,7 +81,7 @@ func handlerStatus(w http.ResponseWriter, r *http.Request) {
 	case render.ContentTypeJSON:
 		render.JSON(w, r, render.M{"status": 0, "clients": result.ClientList, "name": result.Label})
 	case render.ContentTypeHTML:
-		renderHTML(w, r, "status.html", render.M{"status": result})
+		_ = renderHTML(w, r, "status.html", render.M{"status": result})
 	default:
 		w.WriteHeader(http.StatusNotImplemented)
 	}
@@ -117,9 +118,9 @@ func handlerHome(w http.ResponseWriter, r *http.Request) {
 		"action":  URLFor("client/send"),
 		"domains": settings.Current.ValidMailDomains,
 	}
-	renderHTML(w, r, "home.html", data)
+	_ = renderHTML(w, r, "home.html", data)
 }
 
 func handleRoutes(w http.ResponseWriter, r *http.Request) {
-	renderHTML(w, r, "route-customize.html", render.M{})
+	_ = renderHTML(w, r, "route-customize.html", render.M{})
 }

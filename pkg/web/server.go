@@ -65,10 +65,11 @@ func (s *server) Serve() {
 	}
 }
 
+// TODO: upgrade to Servicer v2
 func (s *server) Stop() {
 	if s.hs != nil {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()
-		s.hs.Shutdown(ctx)
+		s.hs.Shutdown(ctx) //nolint
 	}
 }

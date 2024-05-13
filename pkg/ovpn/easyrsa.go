@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log/slog"
+	"os"
 	"path"
 	"text/template"
 
@@ -68,7 +68,7 @@ func GetClientConfig(ctx context.Context, name string) (out []byte, err error) {
 
 	for k, file := range names {
 		var b []byte
-		b, err = ioutil.ReadFile(path.Join(easyrasPKI, file))
+		b, err = os.ReadFile(path.Join(easyrasPKI, file))
 		if err != nil {
 			slog.Info("read fail", "file", file, "err", err)
 			err = fmt.Errorf("file %q not found", file)

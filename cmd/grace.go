@@ -34,7 +34,7 @@ func startUp() {
 	go func() {
 		slog.Info("waiting signal")
 		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, os.Interrupt, os.Kill, syscall.SIGTERM)
+		signal.Notify(sigint, os.Interrupt, syscall.SIGTERM)
 		sig := <-sigint
 
 		slog.Info("received a signal, shuting down", "sig", sig)

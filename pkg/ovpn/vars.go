@@ -8,6 +8,7 @@ import (
 	"github.com/liut/ovpntend/pkg/settings"
 )
 
+// nolint
 var (
 	easyrasPKI string
 	caPassword string

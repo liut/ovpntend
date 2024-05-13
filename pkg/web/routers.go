@@ -64,10 +64,12 @@ func (s *server) strapRouter() {
 
 }
 
+// nolint
 func handleNoContent(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(204)
 }
 
+// nolint
 func handlerPing(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Pong\n"))
 }
