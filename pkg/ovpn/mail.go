@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log/slog"
 
 	"github.com/go-mail/mail"
 
@@ -41,11 +42,11 @@ func SendConfig(ctx context.Context, name, oscat string) error {
 	if len(body) == 0 {
 		return ErrEmptyConfig
 	}
-	logger().Infow("read client body", "bytes", len(body))
+	slog.Info("read client body", "bytes", len(body))
 
 	tpl, err := ui.Load("mail/" + oscat + ".htm")
 	if err != nil {
-		logger().Infow("mail data empty", "name", name, "osc", oscat, "err", err)
+		slog.Info("mail data empty", "name", name, "osc", oscat, "err", err)
 		return ErrMailTemplate
 	}
 
@@ -62,7 +63,7 @@ func SendConfig(ctx context.Context, name, oscat string) error {
 	d := mail.NewDialer(smtpHost, smtpPort, smtpUser, smtpPass)
 
 	if err := d.DialAndSend(m); err != nil {
-		logger().Infow("send mail fail", "name", name, "err", err)
+		slog.Info("send mail fail", "name", name, "err", err)
 		return err
 	}
 	return nil

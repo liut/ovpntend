@@ -64,7 +64,7 @@ func (s *server) strapRouter() {
 
 }
 
-func handleNoContent(w http.ResponseWriter, r *http.Request) {
+func handleNoContent(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(204)
 }
 

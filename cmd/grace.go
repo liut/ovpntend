@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
@@ -31,12 +32,12 @@ func startUp() {
 
 	idleConnsClosed := make(chan struct{})
 	go func() {
-		logger().Infow("waiting signal")
+		slog.Info("waiting signal")
 		sigint := make(chan os.Signal, 1)
 		signal.Notify(sigint, os.Interrupt, os.Kill, syscall.SIGTERM)
 		sig := <-sigint
 
-		logger().Infow("received a signal, shuting down", "sig", sig)
+		slog.Info("received a signal, shuting down", "sig", sig)
 		supervisor.Stop()
 		close(idleConnsClosed)
 	}()

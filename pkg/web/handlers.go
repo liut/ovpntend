@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -64,11 +65,11 @@ func handlerStatus(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	ovpnmgr := settings.Current.ManageAddrs[idx]
-	logger().Infow("read ovpn status", "addr", ovpnmgr)
+	slog.Info("read ovpn status", "addr", ovpnmgr)
 	result, err = status.ParseAddr(ovpnmgr)
 
 	if err != nil {
-		logger().Infow("read fail", "err", err)
+		slog.Info("read fail", "err", err)
 		http.Error(w, err.Error(), 400)
 		return
 	}
@@ -103,7 +104,7 @@ func handlerSendClient(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := ovpn.SendConfig(r.Context(), param.Name, param.OSCat); err != nil {
-		logger().Infow("send fail", "err", err)
+		slog.Info("send fail", "err", err)
 		http.Error(w, err.Error(), 503)
 		return
 	}

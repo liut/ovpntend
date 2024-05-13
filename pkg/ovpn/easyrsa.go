@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"log/slog"
 	"path"
 	"text/template"
 
@@ -15,17 +16,20 @@ import (
 func CreateCertificate(name string) {
 	// TODO: set env for cmd
 	if len(name) == 0 {
-		logger().Fatalw("empty name")
+		slog.Error("empty name")
 		return
 	}
 	e, err := expect.Spawn("easyrsa build-client-full " + name + " nopass")
 	if err != nil {
-		logger().Fatalw("call easyrsa fail", "name", name, "err", err)
+		slog.Error("call easyrsa fail", "name", name, "err", err)
+		return
 	}
 	defer e.Close()
 
-	e.Expect("/private/ca.key:")
-	e.Send(caPassword + "\n")
+	if err := e.Expect("/private/ca.key:"); err != nil {
+		slog.Info("expect fail", "err", err)
+	}
+	_ = e.Send(caPassword + "\n")
 }
 
 // GenerateCRL ...
@@ -33,10 +37,13 @@ func GenerateCRL() {
 	// TODO: set env for cmd
 	e, err := expect.Spawn("easyrsa gen-crl")
 	if err != nil {
-		logger().Fatalw("call easyrsa fail", "err", err)
+		slog.Error("call easyrsa fail", "err", err)
+		return
 	}
-	e.Expect("/private/ca.key:")
-	e.Send(caPassword + "\n")
+	if err := e.Expect("/private/ca.key:"); err != nil {
+		slog.Info("expect fail", "err", err)
+	}
+	_ = e.Send(caPassword + "\n")
 }
 
 // GetClientConfig ...
@@ -63,11 +70,11 @@ func GetClientConfig(ctx context.Context, name string) (out []byte, err error) {
 		var b []byte
 		b, err = ioutil.ReadFile(path.Join(easyrasPKI, file))
 		if err != nil {
-			logger().Infow("read fail", "file", file, "err", err)
+			slog.Info("read fail", "file", file, "err", err)
 			err = fmt.Errorf("file %q not found", file)
 			return
 		}
-		logger().Debugw("read ok", "file", file)
+		slog.Debug("read ok", "file", file)
 		cc[k] = string(bytes.TrimRight(b, "\n"))
 	}
 

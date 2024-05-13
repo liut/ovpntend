@@ -2,12 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 
 	"github.com/spf13/cobra"
-	"go.uber.org/zap"
-
-	"github.com/liut/ovpntend/pkg/zlog"
 )
 
 var RootCmd = &cobra.Command{
@@ -17,18 +15,12 @@ var RootCmd = &cobra.Command{
 }
 
 func Execute() {
-	var zlogger *zap.Logger
 	if inDevelop() {
-		zlogger, _ = zap.NewDevelopment()
-	} else {
-		zlogger, _ = zap.NewProduction()
+		slog.SetLogLoggerLevel(slog.LevelDebug)
 	}
-	defer zlogger.Sync() // flushes buffer, if any
-	sugar := zlogger.Sugar()
 
-	zlog.Set(sugar)
 	if inDevelop() {
-		logger().Infow("in develop")
+		slog.Info("in develop")
 	}
 
 	if err := RootCmd.Execute(); err != nil {
@@ -36,8 +28,4 @@ func Execute() {
 		os.Exit(1)
 	}
 	startUp()
-}
-
-func logger() zlog.Logger {
-	return zlog.Get()
 }

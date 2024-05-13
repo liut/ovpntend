@@ -3,6 +3,7 @@ package status
 import (
 	"bufio"
 	"io"
+	"log/slog"
 	"net"
 	"os"
 	"strconv"
@@ -48,7 +49,7 @@ func Parse(rd io.Reader) (*Status, error) {
 		)
 
 		fields := strings.Split(scanner.Text(), ",")
-		logger().Debugw("got line", "fields", fields)
+		slog.Debug("got line", "fields", fields)
 		if fields[0] == "TITLE" {
 			title = fields[1]
 		} else if fields[0] == "TIME" {
@@ -56,14 +57,14 @@ func Parse(rd io.Reader) (*Status, error) {
 		} else if fields[0] == "" {
 			// skip empty
 		} else if checkHeaders(fields) == clientListHeaders {
-			logger().Debugw("found client header")
+			slog.Debug("found client header")
 			judgeFileType = clientListHeaders
 		} else if judgeFileType == clientListHeaders && len(fields) >= len(clientListHeaderColumns)-1 {
 			ct, err = time.ParseInLocation(dateLayout, fields[7], time.Local)
 			if err != nil {
-				logger().Infow("parse time fail", "err", err)
+				slog.Info("parse time fail", "err", err)
 			} else {
-				logger().Debugw("parsed client", "t", ct, "since", time.Since(ct))
+				slog.Debug("parsed client", "t", ct, "since", time.Since(ct))
 			}
 			host, port, _ := net.SplitHostPort(fields[2])
 			clients = append(clients, Client{
@@ -74,14 +75,14 @@ func Parse(rd io.Reader) (*Status, error) {
 		} else if fields[0] == "" {
 
 		} else if checkHeaders(fields) == routingTableHeaders {
-			logger().Debugw("found routing header")
+			slog.Debug("found routing header")
 			judgeFileType = routingTableHeaders
 		} else if judgeFileType == routingTableHeaders && len(fields) >= len(routingTableHeadersColumns)-1 {
 			rt, err = time.ParseInLocation(dateLayout, fields[4], time.Local)
 			if err != nil {
-				logger().Infow("parse time fail", "err", err)
+				slog.Info("parse time fail", "err", err)
 			} else {
-				logger().Debugw("parsed routing", "t", ct, "since", time.Since(ct))
+				slog.Debug("parsed routing", "t", ct, "since", time.Since(ct))
 			}
 			routingTable = append(routingTable, Routing{fields[1], fields[2], fields[3], &rt, Atoi(fields[5])})
 		} else if fields[0] == "GLOBAL_STATS" {
@@ -91,7 +92,7 @@ func Parse(rd io.Reader) (*Status, error) {
 				if err == nil {
 					maxBcastMcastQueueLen = i
 				} else {
-					logger().Infow("strconv fail", "err", err)
+					slog.Info("strconv fail", "err", err)
 				}
 			}
 		} else if fields[0] == "END" {
@@ -99,7 +100,7 @@ func Parse(rd io.Reader) (*Status, error) {
 				break
 			}
 		} else {
-			logger().Infow("parse fail", "fields", fields)
+			slog.Info("parse fail", "fields", fields)
 			return &Status{Result: "Unable to Parse Status "}, err
 		}
 	}
@@ -121,7 +122,7 @@ func Parse(rd io.Reader) (*Status, error) {
 func Atoi(v string) int {
 	i, err := strconv.Atoi(v)
 	if err != nil {
-		logger().Infow("type transform fail", "err", err)
+		slog.Info("type transform fail", "err", err)
 	}
 	return i
 }

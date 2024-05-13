@@ -1,23 +1,16 @@
 package status
 
 import (
+	"log/slog"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap"
-
-	"github.com/liut/ovpntend/pkg/zlog"
 )
 
 func TestMain(m *testing.M) {
-	lgr, _ := zap.NewDevelopment()
-	defer func() {
-		_ = lgr.Sync() // flushes buffer, if any
-	}()
-	sugar := lgr.Sugar()
-	zlog.Set(sugar)
 
+	slog.SetLogLoggerLevel(slog.LevelDebug)
 	os.Exit(m.Run())
 }
 

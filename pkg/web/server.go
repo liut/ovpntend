@@ -3,6 +3,7 @@ package web
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strings"
 	"time"
@@ -50,17 +51,17 @@ func New(debug bool, addr string) interface {
 		}
 
 		if err := chi.Walk(ar, walkFunc); err != nil {
-			logger().Infow("router walk fail", "err", err)
+			slog.Info("router walk fail", "err", err)
 		}
 	}
 	return s
 }
 
 func (s *server) Serve() {
-	logger().Infow("listen web server", "addr", s.Addr)
+	slog.Info("listen web server", "addr", s.Addr)
 	err := s.hs.ListenAndServe()
 	if err != nil {
-		logger().Errorw("server start fail", "err", err)
+		slog.Error("server start fail", "err", err)
 	}
 }
 

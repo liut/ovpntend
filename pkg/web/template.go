@@ -47,16 +47,6 @@ func renderHTML(w http.ResponseWriter, r *http.Request, name string, data interf
 
 func tpl(name string) *template.Template {
 
-	// var tpl *template.Template
-	// tpl, err = template.New("default").Parse(string(blob))
-	// if err != nil {
-	// 	logger().Warnf("parse template err %s", err)
-	// 	return
-	// }
-	// if t, ok := cachedTemplates[name]; ok {
-	// 	return t
-	// }
-
 	t := template.New("_base.html").Funcs(template.FuncMap{
 		"duration":    time.Since,
 		"formatBytes": formatBytes,
