@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-//ParseFile func parse OpenVPN status from log file and return status struct、error
+// ParseFile func parse OpenVPN status from log file and return status struct、error
 func ParseFile(file string) (*Status, error) {
 	rd, err := os.Open(file)
 	if err != nil {
@@ -20,7 +20,7 @@ func ParseFile(file string) (*Status, error) {
 	return Parse(rd)
 }
 
-//Parse func parse OpenVPN status from io.Reader and return status struct、error
+// Parse func parse OpenVPN status from io.Reader and return status struct、error
 func Parse(rd io.Reader) (*Status, error) {
 	scanner := bufio.NewScanner(rd)
 	scanner.Split(bufio.ScanLines)
@@ -28,6 +28,7 @@ func Parse(rd io.Reader) (*Status, error) {
 	var (
 		err                   error
 		title                 string
+		timeUTC               string
 		clients               []Client
 		routingTable          []Routing
 		maxBcastMcastQueueLen int
@@ -51,9 +52,9 @@ func Parse(rd io.Reader) (*Status, error) {
 		if fields[0] == "TITLE" {
 			title = fields[1]
 		} else if fields[0] == "TIME" {
-
+			timeUTC = fields[1]
 		} else if fields[0] == "" {
-
+			// skip empty
 		} else if checkHeaders(fields) == clientListHeaders {
 			logger().Debugw("found client header")
 			judgeFileType = clientListHeaders
@@ -109,6 +110,7 @@ func Parse(rd io.Reader) (*Status, error) {
 
 	return &Status{
 		Title:        title,
+		TimeUTC:      timeUTC,
 		ClientList:   clients,
 		RoutingTable: routingTable,
 		GlobalStats:  GlobalStats{maxBcastMcastQueueLen},

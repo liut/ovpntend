@@ -42,6 +42,7 @@ type GlobalStats struct {
 // Status ...
 type Status struct {
 	Title        string      `json:"title,omitempty"`
+	TimeUTC      string      `json:"timeUTC,omitempty"`
 	ClientList   []Client    `json:"clients"`
 	RoutingTable []Routing   `json:"routings"`
 	GlobalStats  GlobalStats `json:"stats"`
