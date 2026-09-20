@@ -27,7 +27,7 @@ func ParseAddr(management string) (*Status, error) {
 		return &Status{Result: "connect to open server false"}, err
 	}
 
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	// read first sentence
 	buf := make([]byte, infoBufferSize)

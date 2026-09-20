@@ -5,5 +5,5 @@ var (
 )
 
 func IsDevelop() bool {
-	return "dev" == version
+	return version == "dev"
 }

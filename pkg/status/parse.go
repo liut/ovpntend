@@ -17,7 +17,7 @@ func ParseFile(file string) (*Status, error) {
 	if err != nil {
 		return &Status{Result: "open false"}, err
 	}
-	defer rd.Close()
+	defer func() { _ = rd.Close() }()
 	return Parse(rd)
 }
 

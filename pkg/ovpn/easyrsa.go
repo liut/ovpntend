@@ -24,7 +24,7 @@ func CreateCertificate(name string) {
 		slog.Error("call easyrsa fail", "name", name, "err", err)
 		return
 	}
-	defer e.Close()
+	defer func() { _ = e.Close() }()
 
 	if err := e.Expect("/private/ca.key:"); err != nil {
 		slog.Info("expect fail", "err", err)

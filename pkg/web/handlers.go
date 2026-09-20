@@ -106,7 +106,7 @@ func handlerSendClient(w http.ResponseWriter, r *http.Request) {
 
 	if err := ovpn.SendConfig(r.Context(), param.Name, param.OSCat); err != nil {
 		slog.Info("send fail", "err", err)
-		http.Error(w, err.Error(), 503)
+		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
 	}
 
