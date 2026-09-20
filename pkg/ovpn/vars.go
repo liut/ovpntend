@@ -58,7 +58,7 @@ func init() {
 }
 
 func IsValidName(name string) bool {
-	if 0 == len(name) {
+	if len(name) == 0 {
 		return false
 	}
 	return IsValidEmail(name)
