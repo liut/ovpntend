@@ -1,7 +1,7 @@
 package ipip
 
 import (
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/ipipdotnet/datx-go"
@@ -12,13 +12,13 @@ var cityP *datx.City
 func init() {
 	dir := os.Getenv("IPIP_DATX_PATH")
 	if dir == "" {
-		log.Print("IPIP_DATX_PATH not found")
+		slog.Warn("IPIP_DATX_PATH not found")
 		return
 	}
 	var err error
 	cityP, err = datx.NewCity(dir)
 	if err != nil {
-		log.Printf("load ipip datx file failed, ERR %s", err)
+		slog.Warn("load ipip datx file failed", "err", err)
 		return
 	}
 }
@@ -34,7 +34,7 @@ func FindCity(ip string) (city, province, country string) {
 	}
 	arr, err := cityP.Find(ip)
 	if err != nil {
-		log.Printf("find ip %s ERR %s", ip, err)
+		slog.Warn("find ip fail", "ip", ip, "err", err)
 		return
 	}
 

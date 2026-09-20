@@ -1,7 +1,7 @@
 package web
 
 import (
-	"log"
+	"log/slog"
 	"net"
 	"sort"
 
@@ -40,7 +40,7 @@ func parseOfficeIPs(m map[string]string) []officeEntry {
 			out = append(out, officeEntry{single: parsed, label: label})
 			continue
 		}
-		log.Printf("office: ignoring invalid entry %q", ip)
+		slog.Warn("office: ignoring invalid entry", "ip", ip)
 	}
 	sort.SliceStable(out, func(i, j int) bool {
 		return cidrSpecificity(out[i].cidr) > cidrSpecificity(out[j].cidr)
