@@ -97,6 +97,9 @@ func URLFor(path string) string {
 
 // FindPlace ...
 func FindPlace(ip string) string {
+	if label, ok := LookupOfficeLabel(ip); ok {
+		return label
+	}
 	city, pro, _ := ipip.FindCity(ip)
 	if city != "" {
 		if pro != "" && pro != city {
@@ -109,8 +112,7 @@ func FindPlace(ip string) string {
 
 // IsOfficeIP ...
 func IsOfficeIP(ip string) bool {
-	// TODO:
-	return false
+	return ipip.IsPrivate(ip)
 }
 
 // formatBytes ...

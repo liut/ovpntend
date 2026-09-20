@@ -33,6 +33,8 @@ type Config struct {
 	ServerProto string `envconfig:"SERVER_PROTO" default:"udp"`
 	ServerPlace string `envconfig:"SERVER_Place" `
 
+	OfficeIPs map[string]string `envconfig:"OFFICE_IPS"` // 1.2.3.4:Beijing,10.0.0.0/24:OfficeNet
+
 	MailEnabled        bool   `envconfig:"SMTP_ENABLED"`
 	MailHost           string `envconfig:"SMTP_HOST"`
 	MailPort           int    `envconfig:"SMTP_PORT" default:"465"`
