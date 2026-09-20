@@ -1,5 +1,5 @@
 .SILENT :
-.PHONY : main clean dist generate package
+.PHONY : main clean dist generate package lint
 
 WITH_ENV = env `cat .env 2>/dev/null | xargs`
 
@@ -28,6 +28,10 @@ dep: vet ## Download and install dependencies
 vet: ## Run go vet over sources
 	echo "Checking ./pkg ./cmd"
 	GO111MODULE=$(GOMOD) CGO_ENABLED=0 $(GO) vet -all ./pkg/... ./cmd...
+
+lint: ## Run golangci-lint over sources
+	echo "Checking ./pkg ./cmd"
+	golangci-lint run ./cmd/... ./pkg/...
 
 clean: ## Clean built
 	@echo "Cleaning dist"
